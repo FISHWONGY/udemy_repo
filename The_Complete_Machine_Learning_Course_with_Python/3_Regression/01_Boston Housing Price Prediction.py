@@ -44,8 +44,8 @@ model.coef_
 model.intercept_
 
 # Plot
-plt.figure(figsize=(12, 8));
-sns.regplot(X, y);
+plt.figure(figsize=(12, 8))
+sns.regplot(X, y)
 plt.xlabel('average number of rooms per dwelling')
 plt.ylabel("Median value of owner-occupied homes in $1000's")
 plt.show();
