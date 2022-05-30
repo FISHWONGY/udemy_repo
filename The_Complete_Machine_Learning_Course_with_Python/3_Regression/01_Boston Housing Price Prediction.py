@@ -7,6 +7,7 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# MEDV - Housing price. We want to know which col is corr w/ medv
 df = pd.read_csv("/Users/yuawong/Desktop/pycharmPJ/The_Complete_Machine_Learning_Course_with_Python/data/"
                  "housing.data", delim_whitespace=True, header=None)
 
@@ -27,34 +28,47 @@ df.describe()
 sns.pairplot(df[['CRIM', 'ZN', 'INDUS', 'NOX', 'RM']], height=1.5)
 plt.show()
 
+col_study = ['PTRATIO', 'B', 'LSTAT', 'MEDV']
+sns.pairplot(df[col_study], height=2.5);
+plt.show()
+
 # Correlation Analysis and Feature Selection
 pd.options.display.float_format = '{:,.2f}'.format
 df.corr()
 
+# Heatmap for correlation, for everything > 0.5 we'd prob want to have a look
 plt.figure(figsize=(12, 8))
 sns.heatmap(df.corr(), annot=True, fmt=".2f")
 plt.show()
 
+plt.figure(figsize=(16, 10))
+sns.heatmap(df[['CRIM', 'ZN', 'RM', 'LSTAT', 'MEDV']].corr(), annot=True, fmt=".2f")
+plt.show()
+
 # Linear Regression with Scikit-Learn
+# X (features), y (target variable) needs to be a ndarray
 X = df['RM'].values.reshape(-1, 1)
 y = df['MEDV'].values
+
+# Instanciation process - build the model
 model = LinearRegression()
+# Provide the model with the data we have
 model.fit(X, y)
 model.coef_
 model.intercept_
 
-# Plot
+# Plot using the array X, y
 plt.figure(figsize=(12, 8))
 sns.regplot(X, y)
 plt.xlabel('average number of rooms per dwelling')
 plt.ylabel("Median value of owner-occupied homes in $1000's")
 plt.show();
 
-# Plot from original df
+# Plot from original df - same as above
 sns.jointplot(x='RM', y='MEDV', data=df, kind='reg', height=8);
 plt.show();
 
-# Predict
+# Predict - price of 7 rooms
 model.predict(np.array([7]).reshape(1, -1))
 
 '''
@@ -73,7 +87,10 @@ Most commonly, the steps in using the Scikit-Learn estimator API are as follows 
         For unsupervised learning, we often transform or infer properties of the data using the transform() or predict() method.
 '''
 
+# 5 Steps Machine Learning Process
+
 # Step 1: Selecting a model
+# from sklearn.linear_model import LinearRegression
 
 # Step 2: Instantiation
 ml_2 = LinearRegression()
@@ -88,18 +105,20 @@ ml_2.fit(X, y)
 # Step 5: Predict
 ml_2.predict(np.array([15]).reshape(1, -1))
 
-plt.figure(figsize=(12,8));
-sns.regplot(X, y);
+# Plot using the array X, y
+plt.figure(figsize=(12, 8))
+sns.regplot(X, y)
 plt.xlabel('% lower status of the population')
 plt.ylabel("Median value of owner-occupied homes in $1000's")
 plt.show();
 
-
+# Plot using original df
 sns.jointplot(x='LSTAT', y='MEDV', data=df, kind='reg', height=8);
 plt.show();
 
 
-# Robust Regression
+# Robust Regression - Handling outliers
+# Linear Regression would be affected substancially by outliers
 
 '''
 Outlier Demo: http://digitalfirst.bfwpub.com/stats_applet/stats_applet_5_correg.html
@@ -119,14 +138,17 @@ Classify all data as inliers or outliers by calculating the residuals to the est
 Save fitted model as best model if number of inlier samples is maximal. In case the current estimated model has the same number of inliers, it is only considered as the best model if it has better score.
 '''
 
-X = df['RM'].values.reshape(-1,1)
+# Example 1 - Room umber
+X = df['RM'].values.reshape(-1, 1)
 y = df['MEDV'].values
 
 from sklearn.linear_model import RANSACRegressor
 ransac = RANSACRegressor()
 
+# Already dropping all of the outliers
 ransac.fit(X, y)
 
+# Creating a mask - inlier & outlier
 inlier_mask = ransac.inlier_mask_
 outlier_mask = np.logical_not(inlier_mask)
 
@@ -136,12 +158,12 @@ line_X = np.arange(3, 10, 1)
 line_y_ransac = ransac.predict(line_X.reshape(-1, 1))
 
 sns.set(style='darkgrid', context='notebook')
-plt.figure(figsize=(12,8));
+plt.figure(figsize=(12, 8));
 plt.scatter(X[inlier_mask], y[inlier_mask],
             c='blue', marker='o', label='Inliers')
 plt.scatter(X[outlier_mask], y[outlier_mask],
             c='brown', marker='s', label='Outliers')
-plt.plot(line_X, line_y_ransac, color='red')
+plt.plot(line_X, line_y_ransac, color='red') # The predicted value
 plt.xlabel('average number of rooms per dwelling')
 plt.ylabel("Median value of owner-occupied homes in $1000's")
 plt.legend(loc='upper left')
@@ -151,7 +173,8 @@ ransac.estimator_.coef_
 
 ransac.estimator_.intercept_
 
-X = df['LSTAT'].values.reshape(-1,1)
+# Example 2 - Using % lower status of the population
+X = df['LSTAT'].values.reshape(-1, 1)
 y = df['MEDV'].values
 ransac.fit(X, y)
 inlier_mask = ransac.inlier_mask_
@@ -161,7 +184,7 @@ line_y_ransac = ransac.predict(line_X.reshape(-1, 1))
 
 # Plot
 sns.set(style='darkgrid', context='notebook')
-plt.figure(figsize=(12,8));
+plt.figure(figsize=(12, 8));
 plt.scatter(X[inlier_mask], y[inlier_mask],
             c='blue', marker='o', label='Inliers')
 plt.scatter(X[outlier_mask], y[outlier_mask],
@@ -172,12 +195,16 @@ plt.ylabel("Median value of owner-occupied homes in $1000's")
 plt.legend(loc='upper right')
 plt.show()
 
+# Check the difference between the resut of linear regression & Robust regression
 
 # Performance Evaluation of Regression Model
 from sklearn.model_selection import train_test_split
+
+# Taking everything apart from the last col (MEDV)
 X = df.iloc[:, :-1].values
 y = df['MEDV'].values
 
+# Split to train & test set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
 lr = LinearRegression()
@@ -189,7 +216,7 @@ y_train_pred = lr.predict(X_train)
 y_test_pred = lr.predict(X_test)
 
 # Method 1: Residual Analysis
-plt.figure(figsize=(12,8))
+plt.figure(figsize=(12, 8))
 plt.scatter(y_train_pred, y_train_pred - y_train, c='blue', marker='o', label='Training data')
 plt.scatter(y_test_pred, y_test_pred - y_test, c='orange', marker='*', label='Test data')
 plt.xlabel('Predicted values')
@@ -210,12 +237,12 @@ Useful for comparing different regression models
 
 For tuning parameters via a grid search and cross-validation
 '''
-
+# The lower the number the better
 from sklearn.metrics import mean_squared_error
 
-mean_squared_error(y_train, y_train_pred)
+mean_squared_error(y_train, y_train_pred) # ~ 19
 
-mean_squared_error(y_test, y_test_pred)
+mean_squared_error(y_test, y_test_pred) # ~ 33 test set probably alway perform worse than the train data
 
 '''
 Method 3: Coefficient of Determination, 𝑅2
@@ -227,15 +254,15 @@ SST: Total sum of squares
 '''
 from sklearn.metrics import r2_score
 
-r2_score(y_train, y_train_pred)
+r2_score(y_train, y_train_pred) # ~0.77
 
-r2_score(y_test, y_test_pred)
+r2_score(y_test, y_test_pred) # ~0.59 only appllicable to ~59% of the time
 
 # What does a Near Perfect Model Looks like?
 generate_random = np.random.RandomState(0)
 x = 10 * generate_random.rand(1000)
 y = 3 * x + np.random.randn(1000)
-plt.figure(figsize = (10, 8))
+plt.figure(figsiz=(10, 8))
 plt.scatter(x, y);
 plt.show()
 
