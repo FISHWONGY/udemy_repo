@@ -142,7 +142,7 @@ pd.Series(eigenvalues).sort_values()
 # Note that index 8, eigenvalue of 0.0635, is near to zero or very small compared to the others.
 # Small value represents presence of collinearity.
 
-np.abs(pd.Series(eigenvectors[:,8])).sort_values(ascending=False)
+np.abs(pd.Series(eigenvectors[:, 8])).sort_values(ascending=False)
 # Note that index 9, 8, 2 have very high loading when compared against the rest
 
 print(df.columns[2], df.columns[8], df.columns[9])
