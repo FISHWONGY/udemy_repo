@@ -7,9 +7,12 @@ import sklearn
 from sklearn.datasets import load_boston
 boston_data = load_boston()
 df = pd.DataFrame(boston_data.data, columns=boston_data.feature_names)
+# this df doesn't have the target variable (y) - MEDV
+
+# Main diff between linear reg & multiple reg is multiple reg can have multiple features (X)
 
 X = df
-y = boston_data.target
+y = boston_data.target # MEDV
 
 # Statsmodels
 import statsmodels.api as sm
