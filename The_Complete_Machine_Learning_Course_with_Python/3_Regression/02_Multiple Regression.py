@@ -24,14 +24,22 @@ We need to add a constant term to allow statsmodel.api to calculate the bias / i
 𝑦=𝑚𝑋+𝑐
 '''
 
-X_constant = sm.add_constant(X)
-pd.DataFrame(X_constant)
+# Create a constant (y=mx+c的c)
+X_constant = sm.add_constant(X) # it's just 1
+pd.DataFrame(X_constant) # Adding const col to the df
 
+# Bulid the OLS model - Ordinary Least Square model
 model = sm.OLS(y, X_constant)
 
+# Fitting the model
 lr = model.fit()
 
 lr.summary()
+# Check the R2,
+# coef: if -ve = -vely correlated to the target/ dependent variable (y) = if that var decrease, y will decrease too;
+# +ve = +vely correlated to the target/ dependent variable (y) = if that var increase, y will increase as well
+# p-value < 0.005 = significant
+
 
 # Model Statistical Outputs:
 '''
@@ -104,7 +112,7 @@ Prob (JB): p-value of Jarque-Bera.
 Cond. No: This is a test for multicollinearity. > 30 indicates unstable results
 '''
 
-# statsmodels.formula.api
+# statsmodels.formula.api - specify all of the parameter needed
 form_lr = smf.ols(formula=
                   'y ~ CRIM + ZN + INDUS + CHAS + NOX + RM + AGE + DIS + RAD + TAX + PTRATIO + B + LSTAT',
                   data=df)
@@ -112,11 +120,15 @@ mlr = form_lr.fit()
 
 mlr.summary()
 
+# Remove INDUS & AGE
 form_lr = smf.ols(formula=
                   'y ~ CRIM + ZN + CHAS + NOX + RM + DIS + RAD + TAX + PTRATIO + B + LSTAT',
                   data=df)
 mlr = form_lr.fit()
 mlr.summary()
+# Condition number is high - some of the variables are correlating themselve,
+# which might create an issue of making the model unstable
+
 
 # EXERCISE -
 # Create a model using the following features: CRIM, ZN, CHAS, NOX
@@ -125,19 +137,23 @@ mlr = form_lr.fit()
 mlr.summary()
 
 
+# To solve high conditon number
 # Correlation Matrix
 # Useful diagnostic tool to identify collinearity between predictors
 pd.options.display.float_format = '{:,.2f}'.format
 corr_matrix = df.corr()
 
+# Just dig into those that are > 0.6 or < -0.6
 corr_matrix[np.abs(corr_matrix) < 0.6] = 0
 corr_matrix
 
-plt.figure(figsize=(12,8))
+plt.figure(figsize=(12, 8))
 sns.heatmap(corr_matrix, annot=True, cmap='YlGnBu')
 plt.show()
+# Now you can see which variable themselves are correlating to themselves
 
 
+# Some other ways
 # Detecting Collinearity with Eigenvectors
 eigenvalues, eigenvectors = np.linalg.eig(df.corr())
 pd.options.display.float_format = '{:,.4f}'.format
@@ -148,6 +164,8 @@ pd.Series(eigenvalues).sort_values()
 np.abs(pd.Series(eigenvectors[:, 8])).sort_values(ascending=False)
 # Note that index 9, 8, 2 have very high loading when compared against the rest
 
+# To find out what is 2,8,9 - similar output with the corr matrix above
+# These 3 variables are the trouble maker
 print(df.columns[2], df.columns[8], df.columns[9])
 # Output - NOX, TAX, INDUS
 # These are the factors that are causing multicollinearity problem.
@@ -162,8 +180,10 @@ Check:
 plt.hist(df['TAX'])
 
 plt.hist(df['NOX'])
+# So we can sww these variable has a large range of value
 
-# Standardise Variable to Identify Key Feature(s)
+# To solve...
+# Standardise Variable to Identify Key Feature(s) - with scikitlearn
 '''
 In order to perform point 2 properly, one needs to standardise the variable
 '''
@@ -184,6 +204,8 @@ standard_coefficient_linear_reg.fit(X,y)
 result = pd.DataFrame(list(zip(standard_coefficient_linear_reg.steps[1][1].coef_, df.columns)),
                       columns=['coefficient', 'name']).set_index('name')
 np.abs(result).sort_values(by='coefficient', ascending=False)
+# Now the result is better after standardising, ranging from 0-3,
+# not as above (line 127) the model from OLS ranging from 0.00x - 35
 
 
 # Use 𝑅2 to Identify Key Features
