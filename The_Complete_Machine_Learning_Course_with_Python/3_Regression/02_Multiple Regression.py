@@ -219,19 +219,23 @@ from sklearn.metrics import r2_score
 linear_reg = smf.ols(formula='y ~ CRIM + ZN + INDUS + CHAS + NOX + RM + AGE + DIS + RAD + TAX + PTRATIO + B + LSTAT',
                      data=df)
 benchmark = linear_reg.fit()
-r2_score(y, benchmark.predict(df))
+r2_score(y, benchmark.predict(df)) # 0.74
 
 # Without LSTAT
 linear_reg = smf.ols(formula='y ~ CRIM + ZN + INDUS + CHAS + NOX + RM + AGE + DIS + RAD + TAX + PTRATIO + B',
                      data=df)
 benchmark = linear_reg.fit()
-r2_score(y, benchmark.predict(df))
+r2_score(y, benchmark.predict(df)) # 0.68
 
 # Without Age
 linear_reg = smf.ols(formula='y ~ CRIM + ZN + INDUS + CHAS + NOX + RM + DIS + RAD + TAX + PTRATIO + B + LSTAT',
                      data=df)
 benchmark = linear_reg.fit()
-r2_score(y, benchmark.predict(df))
+r2_score(y, benchmark.predict(df)) # 0.74
+# LSTAT is a more significant variable than Age
+# Look back to line 206, LSTAT is the most significant variable then DIS & RM
+
+# So
 
 
 
