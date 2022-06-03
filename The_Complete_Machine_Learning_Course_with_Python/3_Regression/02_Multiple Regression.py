@@ -235,8 +235,12 @@ r2_score(y, benchmark.predict(df)) # 0.74
 # LSTAT is a more significant variable than Age
 # Look back to line 206, LSTAT is the most significant variable then DIS & RM
 
-# So
-
+# Just testing
+# So, if we try to remove LSTAT, DIS, RM, the r2 of the model fall to 0.46
+linear_reg = smf.ols(formula='y ~ CRIM + ZN + INDUS + CHAS + NOX + RAD + TAX + PTRATIO + B',
+                     data=df)
+benchmark = linear_reg.fit()
+r2_score(y, benchmark.predict(df))
 
 
 
