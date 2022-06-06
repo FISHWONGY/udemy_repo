@@ -326,7 +326,7 @@ plt.scatter(X.values[:, 0], X.values[:, 1], c=y, s=80,
 
 
 ###
-# 5. Support Vector Regression
+# 4. Support Vector Regression
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
