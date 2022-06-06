@@ -3,6 +3,7 @@
 import pandas as pd
 import seaborn as sns
 
+# 3 Types of regularisation
 '''
 Ridge Regression
 
