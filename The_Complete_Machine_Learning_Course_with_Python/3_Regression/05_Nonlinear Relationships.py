@@ -100,7 +100,7 @@ Which features are more important?
 Can scikit-learn help us with this?
 '''
 
-# According to AdaBoost
+# According to AdaBoost - which features are more important
 result = pd.DataFrame(ada.feature_importances_, df.columns)
 result.columns = ['feature']
 result.sort_values(by='feature', ascending=False)
@@ -110,7 +110,7 @@ result.sort_values(by='feature', ascending=False).plot(kind='bar')
 # According to Random Forest
 result = pd.DataFrame(forest.feature_importances_, df.columns)
 result.columns = ['feature']
-result.sort_values(by='feature', ascending=False).plot(kind='bar');
+result.sort_values(by='feature', ascending=False).plot(kind='bar')
 
 '''
 Exercise
@@ -126,15 +126,29 @@ I would like you to make use of Decision Tree Regressor and perform the followin
 3. Calculate MSE and R-square
 4. Extract feature importance and visualise it using bar chart
 '''
+X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                    test_size=0.3,
+                                                    random_state=42)
+
+tree = DecisionTreeRegressor(max_depth=3)
+tree.fit(X_train, y_train)
+
+y_train_pred = tree.predict(X_train)
+y_test_pred = tree.predict(X_test)
+
+print("MSE train: {0:.4f}, test: {1:.4f}".format(mean_squared_error(y_train, y_train_pred),
+                                                 mean_squared_error(y_test, y_test_pred)))
+
+print("R^2 train: {0:.4f}, test: {1:.4f}".format(r2_score(y_train, y_train_pred),
+                                                 r2_score(y_test, y_test_pred)))
+
+# According to Decision Tree Regressor
+result = pd.DataFrame(tree.feature_importances_, df.columns)
+result.columns = ['feature']
+result.sort_values(by='feature', ascending=False).plot(kind='bar')
 
 
-
-
-
-
-
-
-
+'''
 tree = DecisionTreeRegressor(max_depth=3)
 tree.fit(X_train, y_train)
 
@@ -149,6 +163,6 @@ print("R^2 train: {0:.4f}, test: {1:.4f}".format(r2_score(y_train, y_train_pred)
 
 result = pd.DataFrame(tree.feature_importances_, df.columns)
 result.columns = ['feature']
-result.sort_values(by='feature', ascending=False).plot(kind='bar');
-
+result.sort_values(by='feature', ascending=False).plot(kind='bar')
+'''
 

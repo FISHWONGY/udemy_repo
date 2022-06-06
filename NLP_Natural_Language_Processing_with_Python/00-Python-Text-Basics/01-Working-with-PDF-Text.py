@@ -8,7 +8,8 @@ import PyPDF2
 # First we open a pdf, then create a reader object for it. Notice how we use the binary method of reading , 'rb', instead of just 'r'.
 
 # Notice we read it as a binary with 'rb'
-f = open('US_Declaration.pdf',' rb')
+f = open('/Users/yuawong/Documents/GitHub/udemy_repo/NLP_Natural_Language_Processing_with_Python/00-Python-Text-Basics/'
+         'US_Declaration.pdf', 'rb')
 pdf_reader = PyPDF2.PdfFileReader(f)
 pdf_reader.numPages
 page_one = pdf_reader.getPage(0)
@@ -22,12 +23,14 @@ f.close()
 # ## Adding to PDFs
 # We can not write to PDFs using Python because of the differences between the single string type of Python, and the variety of fonts, placements, and other parameters that a PDF could have.
 # What we *can* do is copy pages and append pages to the end.
-f = open('US_Declaration.pdf', 'rb')
+f = open('/Users/yuawong/Documents/GitHub/udemy_repo/NLP_Natural_Language_Processing_with_Python/00-Python-Text-Basics/'
+         'US_Declaration.pdf', 'rb')
 pdf_reader = PyPDF2.PdfFileReader(f)
 first_page = pdf_reader.getPage(0)
 pdf_writer = PyPDF2.PdfFileWriter()
 pdf_writer.addPage(first_page)
-pdf_output = open("Some_New_Doc.pdf","wb")
+pdf_output = open("/Users/yuawong/Documents/GitHub/udemy_repo/NLP_Natural_Language_Processing_with_Python/"
+                  "00-Python-Text-Basics/Some_New_Doc.pdf", "wb")
 pdf_writer.write(pdf_output)
 pdf_output.close()
 f.close()
