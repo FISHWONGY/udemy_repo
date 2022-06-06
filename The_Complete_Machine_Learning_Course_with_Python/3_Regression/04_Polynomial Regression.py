@@ -42,6 +42,10 @@ y = X ** 3 + 100 + rng
 plt.figure(figsize=(10, 8))
 plt.scatter(X, y)
 
+y = X ** 3 + 100
+plt.figure(figsize=(10, 8))
+plt.scatter(X, y)
+
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
@@ -62,22 +66,13 @@ poly_reg = PolynomialFeatures(degree=2)
 X_poly = poly_reg.fit_transform(X.reshape(-1, 1))
 
 X[:5]
-
 X_poly[:5]
-
-degree_three = PolynomialFeatures(degree=3)
-example = degree_three.fit_transform(X.reshape(-1, 1))
-
-example[:5]
 
 res = np.array([0, 1, 2, 3, 4, 5])
 res
 
 res_two = poly_reg.fit_transform(res.reshape(-1, 1))
 res_two
-
-res_three = degree_three.fit_transform(res.reshape(-1, 1))
-res_three
 
 lin_reg_2 = LinearRegression()
 lin_reg_2.fit(X_poly, y.reshape(-1, 1))
@@ -88,8 +83,20 @@ plt.scatter(X, y)
 plt.plot(X, y_pred)
 print(r2_score(y, y_pred))
 
+# Degree 3
+degree_three = PolynomialFeatures(degree=3)
+example = degree_three.fit_transform(X.reshape(-1, 1))
+
+example[:5]
+res_three = degree_three.fit_transform(res.reshape(-1, 1))
+res_three
+
+
+'''
 # Boston Housing Dataset
-df_boston = pd.read_csv('housing.data', delim_whitespace=True, header=None)
+'''
+df_boston = pd.read_csv('/Users/yuawong/Documents/GitHub/udemy_repo/The_Complete_Machine_Learning_Course_with_Python/'
+                        'data/housing.data', delim_whitespace=True, header=None)
 df_boston.columns = ['CRIM', 'ZN', 'INDUS', 'CHAS', 'NOX', 'RM', 'AGE',
                      'DIS', 'RAD', 'TAX', 'PTRATIO', 'B', 'LSTAT', 'MEDV']
 
@@ -99,8 +106,8 @@ df_boston.corr()
 X_boston = df_boston['DIS'].values
 y_boston = df_boston['NOX'].values
 
-plt.figure(figsize=(12,8))
-plt.scatter(X_boston, y_boston);
+plt.figure(figsize=(12, 8))
+plt.scatter(X_boston, y_boston)
 
 # Linear
 lr = LinearRegression()
@@ -113,7 +120,7 @@ plt.plot(X_boston, model_pred)
 print("R^2 score = {:.2f}".format(r2_score(y_boston, model_pred)))
 
 
-# Quadratic
+# Quadratic x^2
 poly_reg = PolynomialFeatures(degree=2)
 X_poly_b = poly_reg.fit_transform(X_boston.reshape(-1, 1))
 lin_reg_2 = LinearRegression()
@@ -147,3 +154,20 @@ plt.figure(figsize=(10, 8))
 plt.scatter(X_boston, y_boston)
 plt.plot(X_fit, y_pred)
 print("R^2 score = {:.2f}".format(r2_score(y_boston, lin_reg_3.predict(X_poly_b))))
+
+
+# X^4 Just trying to test things out
+poly_reg = PolynomialFeatures(degree=4)
+X_poly_b = poly_reg.fit_transform(X_boston.reshape(-1, 1))
+lin_reg_4 = LinearRegression()
+
+lin_reg_4.fit(X_poly_b, y_boston)
+
+X_fit = np.arange(X_boston.min(), X_boston.max(), 1)[:, np.newaxis]
+
+y_pred = lin_reg_4.predict(poly_reg.fit_transform(X_fit.reshape(-1, 1)))
+
+plt.figure(figsize=(10, 8))
+plt.scatter(X_boston, y_boston)
+plt.plot(X_fit, y_pred)
+print("R^2 score = {:.2f}".format(r2_score(y_boston, lin_reg_4.predict(X_poly_b))))

@@ -11,14 +11,20 @@ df = pd.DataFrame(boston_data.data, columns=boston_data.feature_names)
 
 y = boston_data.target
 
+'''
+# 1st Regressor
 # Brief Introduction to Decision Tree
+'''
 from sklearn.tree import DecisionTreeRegressor
 X = df[['LSTAT']].values
+
+# Parameter - max_depth we need to decide
+# No way to know if it's too deep, we just need to try and plot things out to see
 tree = DecisionTreeRegressor(max_depth=5)
 tree.fit(X, y)
 
 sort_idx = X.flatten().argsort()
-plt.figure(figsize=(10,8))
+plt.figure(figsize=(10, 8))
 plt.scatter(X[sort_idx], y[sort_idx])
 plt.plot(X[sort_idx], tree.predict(X[sort_idx]), color='k')
 
@@ -30,13 +36,14 @@ plt.ylabel('MEDV')
 tree = DecisionTreeRegressor(max_depth=2)
 tree.fit(X, y)
 sort_idx = X.flatten().argsort()
-plt.figure(figsize=(10,8))
+plt.figure(figsize=(10, 8))
 plt.scatter(X[sort_idx], y[sort_idx])
 plt.plot(X[sort_idx], tree.predict(X[sort_idx]), color='k')
 
 plt.xlabel('LSTAT')
 plt.ylabel('MEDV')
 
+# 3 works the best, 4 begins to over-fitting
 
 # Brief Introduction to Random Forest
 from sklearn.model_selection import train_test_split
@@ -64,7 +71,9 @@ print("MSE train: {0:.4f}, test: {1:.4f}".format(mean_squared_error(y_train, y_t
 print("R^2 train: {0:.4f}, test: {1:.4f}".format(r2_score(y_train, y_train_pred),
                                                  r2_score(y_test, y_test_pred)))
 
+'''
 # Brief Introduction to AdaBoost
+'''
 from sklearn.ensemble import AdaBoostRegressor
 ada = AdaBoostRegressor(DecisionTreeRegressor(max_depth=4),
                         n_estimators=500, random_state=42)
@@ -79,6 +88,8 @@ print("MSE train: {0:.4f}, test: {1:.4f}".format(mean_squared_error(y_train, y_t
 
 print("R^2 train: {0:.4f}, test: {1:.4f}".format(r2_score(y_train, y_train_pred),
                                                  r2_score(y_test, y_test_pred)))
+
+# Random Forest works better than AdaBoost in this case
 
 '''
 Revisiting Feature Importance
