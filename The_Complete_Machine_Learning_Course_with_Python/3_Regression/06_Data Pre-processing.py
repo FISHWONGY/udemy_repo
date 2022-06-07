@@ -156,9 +156,9 @@ preserving zero entries in sparse data.
 
 # MinMaxScaler
 # Scale a data to the [0, 1] range:
-X_train = np.array([[ 1., -1.,  2.],
-                    [ 2.,  0.,  0.],
-                    [ 0.,  1., -1.]])
+X_train = np.array([[1., -1.,  2.],
+                    [2.,  0.,  0.],
+                    [0.,  1., -1.]])
 
 min_max_scaler = preprocessing.MinMaxScaler()
 
@@ -246,9 +246,9 @@ There are two types of Normalization
 2. L2 normalization, Least squares, Ensure that the sum of squares is 1.
 '''
 
-X = [[ 1., -1.,  2.],
-     [ 2.,  0.,  0.],
-     [ 0.,  1., -1.]]
+X = [[1., -1.,  2.],
+     [2.,  0.,  0.],
+     [0.,  1., -1.]]
 X_normalized = preprocessing.normalize(X, norm='l2')
 
 X_normalized
@@ -275,9 +275,9 @@ It is also common among the text processing community to use binary feature valu
 (probably to simplify the probabilistic reasoning) even if normalized counts (a.k.a. term frequencies) or 
 TF-IDF valued features often perform slightly better in practice.
 '''
-X = [[ 1., -1.,  2.],
-     [ 2.,  0.,  0.],
-     [ 0.,  1., -1.]]
+X = [[1., -1.,  2.],
+     [2.,  0.,  0.],
+     [0.,  1., -1.]]
 
 binarizer = preprocessing.Binarizer().fit(X)  # fit does nothing
 binarizer
@@ -289,7 +289,9 @@ binarizer = preprocessing.Binarizer(threshold=-0.5)
 
 binarizer.transform(X)
 
+'''
 # Encoding categorical features
+'''
 source = ['australia', 'singapore', 'new zealand', 'hong kong']
 
 label_enc = preprocessing.LabelEncoder()
@@ -297,7 +299,7 @@ src = label_enc.fit_transform(source)
 
 print("country to code mapping:\n")
 for k, v in enumerate(label_enc.classes_):
-    print(v,'\t', k)
+    print(v, '\t', k)
 
 
 test_data = ['hong kong', 'singapore', 'australia', 'new zealand']
