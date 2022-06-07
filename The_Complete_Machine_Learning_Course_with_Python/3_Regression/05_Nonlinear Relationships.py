@@ -101,6 +101,7 @@ Can scikit-learn help us with this?
 '''
 
 # According to AdaBoost - which features are more important
+# LSTAT, RM, DIS, RATIO,NOX, CRIM
 result = pd.DataFrame(ada.feature_importances_, df.columns)
 result.columns = ['feature']
 result.sort_values(by='feature', ascending=False)
@@ -108,6 +109,7 @@ result.sort_values(by='feature', ascending=False)
 result.sort_values(by='feature', ascending=False).plot(kind='bar')
 
 # According to Random Forest
+# LSTAT, RM, DIS, CRIM, RATIO, NOX
 result = pd.DataFrame(forest.feature_importances_, df.columns)
 result.columns = ['feature']
 result.sort_values(by='feature', ascending=False).plot(kind='bar')
