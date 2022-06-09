@@ -48,7 +48,7 @@ for i in range(len(degrees)):
     pipeline.fit(X[:, np.newaxis], y)
 
     # Evaluate the models using crossvalidation
-    scores = cross_val_score(pipeline, X[:, np.newaxis], y,
+    scores = cross_val_score( pipeline, X[:, np.newaxis], y,
                              scoring="neg_mean_squared_error", cv=10)
 
     X_test = np.linspace(0, 1, 100)
@@ -91,8 +91,8 @@ param_range = np.logspace(-5, 2, 10)
 train_scores, valid_scores = validation_curve(Ridge(),
                                               X,
                                               y,
-                                              param_name,
-                                              param_range,
+                                              param_name=param_name,
+                                              param_range=param_range,
                                               scoring='r2',
                                               cv=5)
 print(train_scores)
@@ -105,7 +105,7 @@ test_mean = np.mean(valid_scores, axis=1)
 test_std = np.std(valid_scores, axis=1)
 
 
-plt.figure(figsize=(10,8))
+plt.figure(figsize=(10, 8))
 plt.plot(param_range, train_mean,
          color='blue', marker='o',
          markersize=5, label='training accuracy')
@@ -160,7 +160,7 @@ test_scores_mean = np.mean(test_scores, axis=1)
 test_scores_std = np.std(test_scores, axis=1)
 
 
-plt.figure(figsize=(10,8))
+plt.figure(figsize=(10, 8))
 plt.title("Validation Curve with SVM")
 plt.xlabel("$\gamma$")
 plt.ylabel("Score")
@@ -434,8 +434,8 @@ param_range = np.logspace(-5, 2, 10)
 train_scores, valid_scores = validation_curve(Ridge(),
                                               X,
                                               y,
-                                              param_name,
-                                              param_range)
+                                              param_name=param_name,
+                                              param_range=param_range)
 print(train_scores)
 print(valid_scores)
 
