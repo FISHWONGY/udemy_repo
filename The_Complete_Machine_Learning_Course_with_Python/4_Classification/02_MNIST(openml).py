@@ -14,6 +14,9 @@ X.shape
 y
 
 y = y.astype("float")
+
+# Instead of DF, X needs to be array
+X = X.to_numpy()
 X[69999]
 y[69999]
 y.shape
@@ -22,7 +25,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 def viz(n):
-    plt.imshow(X[n].reshape(28,28))
+    plt.imshow(X[n].reshape(28, 28))
     return
 
 
@@ -34,7 +37,9 @@ viz(1000)
 # Exercise: Locating the number 4 and plot the image
 type(y)
 y == 4
-np.where(y==4)
+np.where(y == 4)
+# array([    2,     9,    20, ..., 69977, 69987, 69997]) All of these are 4's hand writing
+
 y[69977]
 
 _ = X[69977]
@@ -57,7 +62,12 @@ X_train, X_test, y_train, y_test = X[:num_split], X[num_split:], y[:num_split], 
 shuffle_index = np.random.permutation(num_split)
 X_train, y_train = X_train[shuffle_index], y_train[shuffle_index]
 
+'''
 # Training a Binary Classifier
+What the code below doing is split the data into 2 classes
+1 class - 'zero'
+2 class - 'non-zero'
+'''
 y_train_0 = (y_train == 0)
 y_train_0
 
@@ -76,17 +86,18 @@ clf = SGDClassifier(random_state=0)
 clf.fit(X_train, y_train_0)
 
 #  Prediction
-viz(1000)
+viz(1000) # 0
 
-clf.predict(X[1000].reshape(1, -1))
+clf.predict(X[1000].reshape(1, -1)) # true = predicted correctly it is 0
 
-viz(1001)
+viz(1001) # 4
 
-clf.predict(X[1001].reshape(1, -1))
+clf.predict(X[1001].reshape(1, -1)) # false = predicted correctly it is not 0
 
-
+'''
 ###
 # Performance Measures
+'''
 # Measuring Accuracy Using Cross-Validation
 # StratifiedKFold
 '''
@@ -99,7 +110,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.base import clone
 clf = SGDClassifier(random_state=0)
 
-skfolds = StratifiedKFold(n_splits=3, random_state=100)
+skfolds = StratifiedKFold(n_splits=3, random_state=100, shuffle=True)
 
 for train_index, test_index in skfolds.split(X_train, y_train_0):
     clone_clf = clone(clf)
@@ -193,7 +204,8 @@ y_some_digits_pred
 
 y_scores = cross_val_predict(clf, X_train, y_train_0, cv=3, method='decision_function')
 
-plt.figure(figsize=(12,8)); plt.hist(y_scores, bins=100)
+plt.figure(figsize=(12, 8))
+plt.hist(y_scores, bins=100)
 
 # With the decision scores, we can compute precision and recall for all possible thresholds using the precision_recall_curve() function:
 from sklearn.metrics import precision_recall_curve
@@ -207,7 +219,7 @@ def plot_precision_recall_vs_threshold(precisions, recalls, thresholds):
     plt.ylim([-0.5, 1.5])
 
 
-plt.figure(figsize=(12, 8));
+plt.figure(figsize=(12, 8))
 plot_precision_recall_vs_threshold(precisions, recalls, thresholds)
 plt.show()
 
@@ -324,3 +336,4 @@ precision_score(y_train_0, y_train_rf)
 recall_score(y_train_0, y_train_rf)
 
 confusion_matrix(y_train_0, y_train_rf)
+

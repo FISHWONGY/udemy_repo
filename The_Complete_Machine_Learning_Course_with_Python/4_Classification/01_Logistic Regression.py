@@ -17,6 +17,7 @@ np.array(tmp) > 0.7
 
 
 # Making Predictions with Logistic Regression
+# Go to solution for 2-class classification problem
 '''
 𝑦̂ =1.0 / (1.0+𝑒−𝛽0−𝛽1𝑥𝑖)
 
@@ -74,37 +75,40 @@ clf_LR.predict_proba(X)
 
 
 # Classification Exercise
-dataset2 = [[ 0.2,  0. ],
-            [ 0.2,  0. ],
-            [ 0.2,  0. ],
-            [ 0.2,  0. ],
-            [ 0.2,  0. ],
-            [ 0.4,  0. ],
-            [ 0.3,  0. ],
-            [ 0.2,  0. ],
-            [ 0.2,  0. ],
-            [ 0.1,  0. ],
-            [ 1.4,  1. ],
-            [ 1.5,  1. ],
-            [ 1.5,  1. ],
-            [ 1.3,  1. ],
-            [ 1.5,  1. ],
-            [ 1.3,  1. ],
-            [ 1.6,  1. ],
-            [ 1. ,  1. ],
-            [ 1.3,  1. ],
-            [ 1.4,  1. ]]
+dataset2 = [[0.2,  0.],
+            [0.2,  0.],
+            [0.2,  0.],
+            [0.2,  0.],
+            [0.2,  0.],
+            [0.4,  0.],
+            [0.3,  0.],
+            [0.2,  0.],
+            [0.2,  0.],
+            [0.1,  0.],
+            [1.4,  1.],
+            [1.5,  1.],
+            [1.5,  1.],
+            [1.3,  1.],
+            [1.5,  1.],
+            [1.3,  1.],
+            [1.6,  1.],
+            [1.,  1.],
+            [1.3,  1.],
+            [1.4,  1.]]
 
 X = np.array(dataset2)[:, 0:1]
 y = np.array(dataset2)[:, 1]
 
 clf_LR = LogisticRegression(C=1.0, penalty='l2', tol=0.0001, solver='lbfgs')
 
-clf_LR.fit(X,y)
+clf_LR.fit(X, y)
 
 y_pred = clf_LR.predict(X)
 clf_LR.predict(X)
 
 np.column_stack((y_pred, y))
 
-clf_LR.predict(np.array([0.9]).reshape(1,-1))
+clf_LR.predict(np.array([0.9]).reshape(1, -1))
+
+clf_LR.predict(np.array([0.4]).reshape(1, -1))
+
