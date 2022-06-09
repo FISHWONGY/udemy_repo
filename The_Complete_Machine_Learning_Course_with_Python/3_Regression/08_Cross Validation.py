@@ -173,7 +173,7 @@ from sklearn.decomposition import PCA
 from sklearn.pipeline import make_pipeline
 pipe_svm = make_pipeline(StandardScaler(),
                          PCA(n_components=2),
-                         svm.SVR(kernel='linear', C=1))
+                         svm.SVR(kernel='linear', C=1)) # LogisticRegression(random_state=1)
 pipe_svm.fit(X_train, y_train)
 y_pred = pipe_svm.predict(X_test)
 print('Test Accuracy: %.3f' % pipe_svm.score(X_test, y_test))
