@@ -241,7 +241,9 @@ plt.ylabel('precisions')
 plt.title('PR Curve: precisions/recalls tradeoff')
 
 
+'''
 # Setting High Precisions
+'''
 # Let's aim for 90% precisions.
 len(precisions)
 len(thresholds)
@@ -251,7 +253,7 @@ plt.plot(thresholds, precisions[1:])
 idx = len(precisions[precisions < 0.9])
 thresholds[idx]
 
-y_train_pred_90 = (y_scores > 21454)
+y_train_pred_90 = (y_scores > thresholds[idx])
 
 precision_score(y_train_0, y_train_pred_90)
 recall_score(y_train_0, y_train_pred_90)
@@ -265,6 +267,9 @@ precision_score(y_train_0, y_train_pred_90)
 recall_score(y_train_0, y_train_pred_90)
 
 
+'''
+Setting High Recall
+'''
 # Exercise
 # High Recall Score. Recall score > 0.9
 idx = len(recalls[recalls > 0.9])
@@ -292,14 +297,14 @@ fpr, tpr, thresholds = roc_curve(y_train_0, y_scores)
 
 def plot_roc_curve(fpr, tpr, label=None):
     plt.plot(fpr, tpr, linewidth=2, label=label)
-    plt.plot([0,1], [0,1], 'k--')
+    plt.plot([0, 1], [0, 1], 'k--')
     plt.axis([0, 1, 0, 1])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
     plt.title('ROC Curve')
 
 
-plt.figure(figsize=(12, 8))
+plt.figure(figsize=(10, 8))
 plot_roc_curve(fpr, tpr)
 plt.show()
 
