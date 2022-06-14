@@ -465,7 +465,7 @@ cl1.get_params()
 """
 # Where to From Here
 ## Tips on practical use
-* Decision trees tend to overfit on data with a large number of features. Check ratio of samples to number of features
+* Decision trees tend to OVEFIT on data with a large number of features. Check ratio of samples to number of features
 * Consider performing dimensionality reduction (PCA, ICA, or Feature selection) beforehand
 * Visualise your tree as you are training by using the export function. Use max_depth=3 as an initial tree depth.
 * Use max_depth to control the size of the tree to prevent overfitting.
