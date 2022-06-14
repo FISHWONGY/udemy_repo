@@ -7,7 +7,7 @@ import pandas as pd
 """
 # Bagging Machine Learning Algorithm
 
-### **B**ootstrap **Agg**regat**ing** or [Bagging](https://en.wikipedia.org/wiki/Bootstrap_aggregating)
+### Bootstrap Aggregating or [Bagging](https://en.wikipedia.org/wiki/Bootstrap_aggregating)
 * [Scikit- Learn Reference](http://scikit-learn.org/stable/modules/ensemble.html#bagging)
 * Bootstrap sampling: Sampling with replacement
 * Combine by averaging the output (regression)
@@ -15,24 +15,18 @@ import pandas as pd
 * Can be applied to many classifiers which includes ANN, CART, etc.
 """
 
+# Data Exploration
 df = sns.load_dataset('titanic')
-
-df.shape
-
+print(df.shape)
 df.head()
-
 df['pclass'].unique()
-
 df['pclass'].value_counts()
-
 df['sex'].unique()
-
 df['sex'].value_counts()
+df['age'].hist(bins=50)
 
-df['age'].hist(bins=50);
 
 """## Data Pre-processing"""
-
 subset = df[['pclass', 'sex', 'age', 'survived']].copy()
 subset.dropna(inplace=True)
 X = subset[['pclass', 'sex', 'age']].copy()
@@ -40,28 +34,22 @@ X = subset[['pclass', 'sex', 'age']].copy()
 from sklearn import preprocessing
 lb = preprocessing.LabelBinarizer()
 
+# Change female, male to 0 & 1
 X['sex'] = lb.fit_transform(subset['sex'])
 
+# Data Exploration
 X.head()
-
-X.shape
-
+print(X.shape)
 X.describe()
-
 X.info()
 
 y = subset['survived']
-
 y.value_counts()
 
 """***
-
 # Random Forest
-
 [paper](http://ect.bell-labs.com/who/tkh/publications/papers/odt.pdf)
-
 * Ensemble of Decision Trees
-
 * Training via the bagging method (Repeated sampling with replacement)
   * Bagging: Sample from samples
   * RF: Sample from predictors. $m=sqrt(p)$ for classification and $m=p/3$ for regression problems.
