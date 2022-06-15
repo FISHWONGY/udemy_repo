@@ -13,43 +13,33 @@ df = sns.load_dataset('titanic')
 df.shape
 
 df.head()
-
 df.dropna(inplace=True)
-
 df['pclass'].unique()
-
 df['pclass'].value_counts()
-
 df['sex'].unique()
-
 df['sex'].value_counts()
+df['age'].hist(bins=50)
 
-df['age'].hist(bins=50);
 
 """## Data Pre-processing"""
-
 subset = df[['pclass', 'sex', 'age', 'survived']].copy()
 subset.dropna(inplace=True)
-X = df[['pclass', 'sex', 'age']].copy()
+X = subset[['pclass', 'sex', 'age']].copy()
 
 from sklearn import preprocessing
 lb = preprocessing.LabelBinarizer()
 
 X['sex'] = lb.fit_transform(X['sex'])
 
+# Data Exploration
 X.head()
-
 X.shape
-
 X.describe()
-
 X.info()
 
 y = subset['survived']
-
 y.value_counts()
 
-"""***"""
 
 from sklearn.model_selection import train_test_split
 
@@ -59,6 +49,8 @@ from sklearn import preprocessing
 from sklearn.model_selection import cross_val_score, cross_val_predict
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.metrics import confusion_matrix, roc_auc_score
+
+
 def print_score(clf, X_train, X_test, y_train, y_test, train=True):
     '''
     v0.1 Follow the scikit learn library format in terms of input
@@ -98,41 +90,44 @@ def print_score(clf, X_train, X_test, y_train, y_test, train=True):
         print("Confusion Matrix: \n {}\n".format(confusion_matrix(y_test, 
                                                                   res_test)))   
         print("ROC AUC: {0:.4f}\n".format(roc_auc_score(lb.transform(y_test), 
-                                                      lb.transform(res_test))))
+                                                        lb.transform(res_test))))
+
 
 """***
-
 # Boosting (Hypothesis Boosting)
-
 * Combine several weak learners into a strong learner. 
-
 * Train predictors sequentially
 
 # AdaBoost / Adaptive Boosting
-
 [Robert Schapire](http://rob.schapire.net/papers/explaining-adaboost.pdf)
-
 [Wikipedia](https://en.wikipedia.org/wiki/AdaBoost)
-
 [Chris McCormick](http://mccormickml.com/2013/12/13/adaboost-tutorial/)
-
 [Scikit Learn AdaBoost](http://scikit-learn.org/stable/modules/ensemble.html#adaboost)
-
 1995
 
 As above for Boosting:
-* Similar to human learning, the algo **learns from past mistakes by focusing more on difficult problems** it did not get right in prior learning. 
+* Similar to human learning, the algo **learns from past mistakes by focusing more on difficult problems** it did not 
+get right in prior learning. 
 * In machine learning speak, it pays more attention to training instances that previously underfitted.
 
 Source: Scikit-Learn:
 
-* Fit a sequence of weak learners (i.e., models that are only slightly better than random guessing, such as small decision trees) on repeatedly modified versions of the data. 
-* The predictions from all of them are then combined through a weighted majority vote (or sum) to produce the final prediction.
-* The data modifications at each so-called boosting iteration consist of applying weights $w_1, w_2, …, w_N$ to each of the training samples. 
-* Initially, those weights are all set to $w_i = 1/N$, so that the first step simply trains a weak learner on the original data. 
-* For each successive iteration, the sample weights are individually modified and the learning algorithm is reapplied to the reweighted data. 
-* At a given step, those training examples that were incorrectly predicted by the boosted model induced at the previous step have their weights increased, whereas the weights are decreased for those that were predicted correctly. 
-* As iterations proceed, examples that are difficult to predict receive ever-increasing influence. Each subsequent weak learner is thereby forced to concentrate on the examples that are missed by the previous ones in the sequence.
+* Fit a sequence of weak learners (i.e., models that are only slightly better than random guessing, such as small 
+decision trees) on repeatedly modified versions of the data. 
+* The predictions from all of them are then combined through a weighted majority vote (or sum) to 
+produce the final prediction.
+
+* The data modifications at each so-called boosting iteration consist of applying weights $w_1, w_2, …, w_N$ 
+to each of the training samples. 
+
+* Initially, those weights are all set to $w_i = 1/N$, so that the first step simply 
+trains a weak learner on the original data. 
+* For each successive iteration, the sample weights are individually modified and the learning algorithm is 
+reapplied to the reweighted data. 
+* At a given step, those training examples that were incorrectly predicted by the boosted model induced at the 
+previous step have their weights increased, whereas the weights are decreased for those that were predicted correctly. 
+* As iterations proceed, examples that are difficult to predict receive ever-increasing influence. 
+Each subsequent weak learner is thereby forced to concentrate on the examples that are missed by the previous ones in the sequence.
 """
 
 from sklearn.ensemble import AdaBoostClassifier
@@ -142,8 +137,8 @@ ada_clf = AdaBoostClassifier(n_estimators=100, random_state=42)
 ada_clf.fit(X_train, y_train)
 
 """
-[SAMME16](https://web.stanford.edu/~hastie/Papers/samme.pdf) (Stagewise Additive Modeling using a Multiclass Exponential loss function).
-
+[SAMME16](https://web.stanford.edu/~hastie/Papers/samme.pdf) 
+(Stagewise Additive Modeling using a Multiclass Exponential loss function).
 R stands for real
 """
 
@@ -151,8 +146,8 @@ print_score(ada_clf, X_train, X_test, y_train, y_test, train=True)
 print("\n*****************************\n")
 print_score(ada_clf, X_train, X_test, y_train, y_test, train=False)
 
-"""## AdaBoost with Random Forest"""
 
+"""## AdaBoost with Random Forest"""
 from sklearn.ensemble import RandomForestClassifier
 
 ada_clf = AdaBoostClassifier(RandomForestClassifier(n_estimators=100), n_estimators=100)
@@ -162,13 +157,34 @@ ada_clf.fit(X_train, y_train)
 print_score(ada_clf, X_train, X_test, y_train, y_test, train=True)
 print("\n*****************************\n")
 print_score(ada_clf, X_train, X_test, y_train, y_test, train=False)
+# Perform better than just adaboost
+
+# Try using Grid Search
+from sklearn.model_selection import GridSearchCV
+
+ada_clf = AdaBoostClassifier(RandomForestClassifier(n_estimators=100), n_estimators=100)
+
+params_grid = {'base_estimator__max_depth': [i for i in range(2, 11, 2)],
+               'base_estimator__min_samples_leaf': [5, 10],
+               'learning_rate': [0.01, 0.1]}
+
+grid_search = GridSearchCV(ada_clf, params_grid,
+                           n_jobs=-1, cv=2,
+                           verbose=1, scoring='accuracy')
+
+grid_search.fit(X_train, y_train)
+
+print(grid_search.best_score_)
+
+print(grid_search.best_estimator_.get_params())
+
+print_score(grid_search, X_train, X_test, y_train, y_test, train=True)
+print("\n******************************\n")
+print_score(grid_search, X_train, X_test, y_train, y_test, train=False)
 
 """***
-
 # Gradient Boosting / Gradient Boosting Machine (GBM)
-
 Works for both regression and classification
-
 [Wikipedia](https://en.wikipedia.org/wiki/Gradient_boosting)
 
 * Sequentially adding predictors
