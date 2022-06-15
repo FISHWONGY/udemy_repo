@@ -1,4 +1,3 @@
-# Commented out IPython magic to ensure Python compatibility.
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -101,7 +100,6 @@ def print_score(clf, X_train, y_train, X_test, y_test, train=True):
 
 
 """# XGBoost"""
-
 import xgboost as xgb
 
 xgb_clf = xgb.XGBClassifier(max_depth=5, n_estimators=10000, learning_rate=0.3,
@@ -110,7 +108,7 @@ xgb_clf = xgb.XGBClassifier(max_depth=5, n_estimators=10000, learning_rate=0.3,
 xgb_clf.fit(X_train, y_train)
 
 print_score(xgb_clf, X_train, y_train, X_test, y_test, train=True)
-
+print("\n******************************\n")
 print_score(xgb_clf, X_train, y_train, X_test, y_test, train=False)
 
 """| Classifier | Decision Tree | Bagging | Random Forest | Optimised RF | Extra-Trees | AdaBoost (CART) | AdaBoost (RF) | Gradient Boosting |
