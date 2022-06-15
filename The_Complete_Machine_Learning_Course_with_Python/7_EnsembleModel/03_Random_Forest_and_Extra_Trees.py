@@ -46,6 +46,8 @@ X.info()
 y = subset['survived']
 y.value_counts()
 
+# X - DF; y - Series
+
 """***
 # Random Forest
 [paper](http://ect.bell-labs.com/who/tkh/publications/papers/odt.pdf)
@@ -74,6 +76,8 @@ from sklearn import preprocessing
 from sklearn.model_selection import cross_val_score, cross_val_predict
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.metrics import confusion_matrix, roc_auc_score
+
+
 def print_score(clf, X_train, X_test, y_train, y_test, train=True):
     '''
     v0.1 Follow the scikit learn library format in terms of input
@@ -113,7 +117,8 @@ def print_score(clf, X_train, X_test, y_train, y_test, train=True):
         print("Confusion Matrix: \n {}\n".format(confusion_matrix(y_test, 
                                                                   res_test)))   
         print("ROC AUC: {0:.4f}\n".format(roc_auc_score(lb.transform(y_test), 
-                                                      lb.transform(res_test))))
+                                                        lb.transform(res_test))))
+
 
 rf_clf = RandomForestClassifier(random_state=42, n_estimators=100)
 
@@ -122,6 +127,7 @@ rf_clf.fit(X_train, y_train)
 print_score(rf_clf, X_train, X_test, y_train, y_test, train=True)
 print("\n******************************\n")
 print_score(rf_clf, X_train, X_test, y_train, y_test, train=False)
+
 
 """## Grid Search"""
 
@@ -139,23 +145,21 @@ params_grid = {"max_depth": [3, None],
 
 grid_search = GridSearchCV(rf_clf, params_grid,
                            n_jobs=-1, cv=5,
-                           verbose=1, scoring='accuracy',
-                           iid=False)
+                           verbose=1, scoring='accuracy')
 
 grid_search.fit(X_train, y_train)
 
-grid_search.best_score_
+print(grid_search.best_score_)
 
-grid_search.best_estimator_.get_params()
+print(grid_search.best_estimator_.get_params())
 
 print_score(grid_search, X_train, X_test, y_train, y_test, train=True)
 print("\n******************************\n")
 print_score(grid_search, X_train, X_test, y_train, y_test, train=False)
 
+
 """***
-
 # Extra-Trees (Extremely Randomized Trees) Ensemble
-
 [scikit-learn](http://scikit-learn.org/stable/modules/ensemble.html#bagging)
 
 * Random Forest is build upon Decision Tree
