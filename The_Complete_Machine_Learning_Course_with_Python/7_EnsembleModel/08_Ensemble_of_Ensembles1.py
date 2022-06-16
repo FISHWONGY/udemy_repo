@@ -1,4 +1,3 @@
-# Commented out IPython magic to ensure Python compatibility.
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,8 +18,6 @@ import matplotlib.pyplot as plt
   * All the results are combined to create an ensemble. 
   * Suitabe for highly flexible models that is prone to overfitting / high variance.
 
-***
-
 ## Combining Method
 
 * **Majority voting or average**: 
@@ -39,7 +36,8 @@ import matplotlib.pyplot as plt
 """
 
 
-df = pd.read_csv("data/WA_Fn-UseC_-HR-Employee-Attrition.csv")
+df = pd.read_csv("/Users/yuawong/Documents/GitHub/udemy_repo/The_Complete_Machine_Learning_Course_with_Python/"
+                 "data/WA_Fn-UseC_-HR-Employee-Attrition.csv")
 num_col = list(df.describe().columns)
 col_categorical = list(set(df.columns).difference(num_col))
 remove_list = ['EmployeeCount', 'EmployeeNumber', 'StandardHours']
@@ -96,31 +94,33 @@ def print_score(clf, X_train, X_test, y_train, y_test, train=True):
 
 
 """## Model 1: Decision Tree"""
-
 from sklearn.tree import DecisionTreeClassifier
 
 tree_clf = DecisionTreeClassifier()
 tree_clf.fit(X_train, y_train)
 
 print_score(tree_clf, X_train, X_test, y_train, y_test, train=True)
+print("\n******************************\n")
 print_score(tree_clf, X_train, X_test, y_train, y_test, train=False)
+# Test Result: accuracy score: 0.7527; ROC AUC: 0.5868
 
 """## Model 2: Random Forest"""
-
 from sklearn.ensemble import RandomForestClassifier
 
 rf_clf = RandomForestClassifier(n_estimators=100)
 rf_clf.fit(X_train, y_train.ravel())
 
 print_score(rf_clf, X_train, X_test, y_train, y_test, train=True)
+print("\n******************************\n")
 print_score(rf_clf, X_train, X_test, y_train, y_test, train=False)
+# Test Result: accuracy score: 0.8424; ROC AUC: 0.5792
+# ROC so low bc the data is so unbalanced and we don't have loads of data for
 
 en_en = pd.DataFrame()
-
 tree_clf.predict_proba(X_train)
 
 en_en['tree_clf'] = pd.DataFrame(tree_clf.predict_proba(X_train))[1]
-en_en['rf_clf'] =  pd.DataFrame(rf_clf.predict_proba(X_train))[1]
+en_en['rf_clf'] = pd.DataFrame(rf_clf.predict_proba(X_train))[1]
 col_name = en_en.columns
 en_en = pd.concat([en_en, pd.DataFrame(y_train).reset_index(drop=True)], axis=1)
 
@@ -134,7 +134,6 @@ en_en.head()
 
 
 """# Meta Classifier"""
-
 from sklearn.linear_model import LogisticRegression
 
 m_clf = LogisticRegression(fit_intercept=False, solver='lbfgs')
@@ -144,7 +143,7 @@ m_clf.fit(en_en[['tree_clf', 'rf_clf']], en_en['ind'])
 en_test = pd.DataFrame()
 
 en_test['tree_clf'] = pd.DataFrame(tree_clf.predict_proba(X_test))[1]
-en_test['rf_clf'] =  pd.DataFrame(rf_clf.predict_proba(X_test))[1]
+en_test['rf_clf'] = pd.DataFrame(rf_clf.predict_proba(X_test))[1]
 col_name = en_en.columns
 en_test['combined'] = m_clf.predict(en_test[['tree_clf', 'rf_clf']])
 
