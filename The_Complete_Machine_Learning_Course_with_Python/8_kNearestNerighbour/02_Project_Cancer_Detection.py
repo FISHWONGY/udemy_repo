@@ -42,7 +42,6 @@ df['Bare Nuclei'].replace("?", np.NAN, inplace=True)
 df = df.dropna()
 
 """Note that for class: 2 is benign, 4 is for malignant
-
 $$\frac{\text{df["Class"]}}{2} - 1$$
 """
 
@@ -61,12 +60,12 @@ X_col = X.columns
 
 y = df['Class']
 
-from sklearn.preprocessing import StandardScaler
 
+from sklearn.preprocessing import StandardScaler
 X = StandardScaler().fit_transform(X.values)
 
-"""Training"""
 
+"""Training"""
 from sklearn.model_selection import train_test_split
 
 df1 = pd.DataFrame(X, columns=X_col)
@@ -134,12 +133,13 @@ def print_score(clf, X_train, X_test, y_train, y_test, train=True):
         print("ROC AUC: {0:.4f}\n".format(roc_auc_score(lb.transform(y_test), 
                                                       lb.transform(res_test))))
 
+
 print_score(knn, X_train, X_test, y_train, y_test, train=True)
 
 print_score(knn, X_train, X_test, y_train, y_test, train=False)
 
-"""# Grid Search"""
 
+"""# Grid Search"""
 from sklearn.model_selection import GridSearchCV
 
 knn.get_params()
@@ -154,20 +154,20 @@ grid_search_cv = GridSearchCV(KNeighborsClassifier(),
 
 grid_search_cv.fit(X_train, y_train)
 
-grid_search_cv.best_estimator_
+print(grid_search_cv.best_estimator_)
 
 print_score(grid_search_cv, X_train, X_test, y_train, y_test, train=True)
 
 print_score(grid_search_cv, X_train, X_test, y_train, y_test, train=False)
 
-grid_search_cv.best_params_
+print(grid_search_cv.best_params_)
 
-grid_search_cv.cv_results_['mean_test_score']
+print(grid_search_cv.cv_results_['mean_test_score'])
 
-grid_search_cv.cv_results_
+print(grid_search_cv.cv_results_)
+
 
 """SVM, Random Forest, XGBoost"""
-
 from sklearn import svm
 clf = svm.SVC(kernel='rbf', gamma="scale")
 clf.fit(X_train, y_train)
