@@ -11,7 +11,8 @@ Predict attrition of your valuable employees
 """
 
 
-df = pd.read_csv("data/WA_Fn-UseC_-HR-Employee-Attrition.csv")
+df = pd.read_csv("/Users/yuawong/Documents/GitHub/udemy_repo/The_Complete_Machine_Learning_Course_with_Python/"
+                 "data/WA_Fn-UseC_-HR-Employee-Attrition.csv")
 df.head()
 
 num_col = list(df.describe().columns)
@@ -57,25 +58,28 @@ def print_score(clf, X_train, y_train, X_test, y_test, train=True):
         res = cross_val_score(clf, X_train, y_train.ravel(), cv=10, scoring='accuracy')
         print("Average Accuracy: \t {0:.4f}".format(np.mean(res)))
         print("Accuracy SD: \t\t {0:.4f}".format(np.std(res)))
-        
+
     elif train==False:
         '''
         test performance
         '''
-        print("Test Result:\n")        
+        print("Test Result:\n")
         print("accuracy score: {0:.4f}\n".format(accuracy_score(y_test, clf.predict(X_test))))
         print("Classification Report: \n {}\n".format(classification_report(y_test, clf.predict(X_test))))
         print("Confusion Matrix: \n {}\n".format(confusion_matrix(y_test, clf.predict(X_test))))
 
 
 print_score(clf, X_train, y_train, X_test, y_test, train=True)
-
+print("\n******************************\n")
 print_score(clf, X_train, y_train, X_test, y_test, train=False)
+# Test Result: accuracy score: 0.7826
 
-"""The result is clearly not satisfactory. We will revisit this project after we covered ensemble model.
-# Bagging
+"""The result is clearly not satisfactory. 
+We will revisit this project after we covered ensemble model.
 """
 
+
+# Bagging
 from sklearn.ensemble import BaggingClassifier
 
 bag_clf = BaggingClassifier(base_estimator=clf, n_estimators=100,
@@ -84,68 +88,76 @@ bag_clf = BaggingClassifier(base_estimator=clf, n_estimators=100,
 bag_clf.fit(X_train, y_train.ravel())
 
 print_score(bag_clf, X_train, y_train, X_test, y_test, train=True)
+print("\n******************************\n")
 print_score(bag_clf, X_train, y_train, X_test, y_test, train=False)
+# Test Result: accuracy score: 0.8478
+
 
 """***
 # Random Forest
 """
-
 from sklearn.ensemble import RandomForestClassifier
-
 rf_clf = RandomForestClassifier(n_estimators=100)
 
 rf_clf.fit(X_train, y_train.ravel())
 
 print_score(rf_clf, X_train, y_train, X_test, y_test, train=True)
+print("\n******************************\n")
 print_score(rf_clf, X_train, y_train, X_test, y_test, train=False)
+# Test Result: accuracy score: 0.8533
+
 
 import seaborn as sns
 
 pd.Series(rf_clf.feature_importances_, 
-         index=X_train.columns).sort_values(ascending=False).plot(kind='bar', figsize=(12,6));
+          index=X_train.columns).sort_values(ascending=False).plot(kind='bar', figsize=(12, 6))
+
 
 """# AdaBoost"""
-
 from sklearn.ensemble import AdaBoostClassifier
 
 ada_clf = AdaBoostClassifier()
-
 ada_clf.fit(X_train, y_train.ravel())
 
 print_score(ada_clf, X_train, y_train, X_test, y_test, train=True)
+print("\n******************************\n")
 print_score(ada_clf, X_train, y_train, X_test, y_test, train=False)
+# Test Result: accuracy score: 0.8560
 
 """***
 # AdaBoost + RandomForest
 """
-
 ada_clf = AdaBoostClassifier(RandomForestClassifier(n_estimators=100), n_estimators=100)
 ada_clf.fit(X_train, y_train.ravel())
 
 print_score(ada_clf, X_train, y_train, X_test, y_test, train=True)
+print("\n******************************\n")
 print_score(ada_clf, X_train, y_train, X_test, y_test, train=False)
+# Test Result: accuracy score: 0.8560
 
 """***
 # Gradient Boosting Classifier
 """
-
 from sklearn.ensemble import GradientBoostingClassifier
 
 gbc_clf = GradientBoostingClassifier(n_estimators=100)
 gbc_clf.fit(X_train, y_train.ravel())
 
 print_score(gbc_clf, X_train, y_train, X_test, y_test, train=True)
+print("\n******************************\n")
 print_score(gbc_clf, X_train, y_train, X_test, y_test, train=False)
+# Test Result: accuracy score: 0.8397
+
 
 """***
 # XGBoost
 """
-
 import xgboost as xgb
 
 xgb_clf = xgb.XGBClassifier(n_estimators=100)
 xgb_clf.fit(X_train, y_train.ravel())
 
 print_score(xgb_clf, X_train, y_train, X_test, y_test, train=True)
+print("\n******************************\n")
 print_score(xgb_clf, X_train, y_train, X_test, y_test, train=False)
-
+# Test Result: accuracy score: 0.8614
