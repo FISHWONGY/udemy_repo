@@ -39,7 +39,8 @@ import matplotlib.pyplot as plt
 """
 
 
-df = pd.read_csv("data/WA_Fn-UseC_-HR-Employee-Attrition.csv")
+df = pd.read_csv("/Users/yuawong/Documents/GitHub/udemy_repo/The_Complete_Machine_Learning_Course_with_Python/"
+                 "data/WA_Fn-UseC_-HR-Employee-Attrition.csv")
 num_col = list(df.describe().columns)
 col_categorical = list(set(df.columns).difference(num_col))
 remove_list = ['EmployeeCount', 'EmployeeNumber', 'StandardHours']
@@ -125,28 +126,29 @@ def print_score(clf, X_train, X_test, y_train, y_test, train=True):
 
 
 """## Model 1: Decision Tree"""
-
 from sklearn.tree import DecisionTreeClassifier
 
 tree_clf = DecisionTreeClassifier()
 tree_clf.fit(X_train, y_train)
 
 print_score(tree_clf, X_train, X_test, y_train, y_test, train=True)
+print("\n******************************\n")
 print_score(tree_clf, X_train, X_test, y_train, y_test, train=False)
-
+# Test Result: accuracy score: 0.7891; ROC AUC: 0.6323
 
 """## Model 2: Random Forest"""
-
 from sklearn.ensemble import RandomForestClassifier
 
 rf_clf = RandomForestClassifier(n_estimators=100)
 rf_clf.fit(X_train, y_train.ravel())
 
 print_score(rf_clf, X_train, X_test, y_train, y_test, train=True)
+print("\n******************************\n")
 print_score(rf_clf, X_train, X_test, y_train, y_test, train=False)
+# Test Result: accuracy score: 0.8367; ROC AUC: 0.5527
+
 
 en_en = pd.DataFrame()
-
 tree_clf.predict_proba(X_train)
 
 en_en['tree_clf'] = pd.DataFrame(tree_clf.predict_proba(X_train))[1]
@@ -164,7 +166,6 @@ en_en.head()
 
 
 """# Meta Classifier"""
-
 from sklearn.linear_model import LogisticRegression
 
 m_clf = LogisticRegression(fit_intercept=False, solver='lbfgs')
@@ -198,17 +199,13 @@ print(classification_report(en_test['ind'], en_test['combined']))
 """
 # Single Classifier
 """
-
-df = pd.read_csv("WA_Fn-UseC_-HR-Employee-Attrition.csv")
-
+df = pd.read_csv("/Users/yuawong/Documents/GitHub/udemy_repo/The_Complete_Machine_Learning_Course_with_Python/"
+                 "data/WA_Fn-UseC_-HR-Employee-Attrition.csv")
 df.head()
-
 df.Attrition.value_counts() / df.Attrition.count()
 
 from sklearn.ensemble import RandomForestClassifier
-
 from sklearn.ensemble import BaggingClassifier
-
 from sklearn.ensemble import AdaBoostClassifier
 
 class_weight = {0: 0.839, 1: 0.161}
@@ -223,7 +220,10 @@ ada = AdaBoostClassifier(base_estimator=forest, n_estimators=100,
 ada.fit(X_train, y_train.ravel())
 
 print_score(ada, X_train, X_test, y_train, y_test, train=True)
+print("\n******************************\n")
 print_score(ada, X_train, X_test, y_train, y_test, train=False)
+# Test Result: accuracy score: 0.8299; ROC AUC: 0.5330
+
 
 bag_clf = BaggingClassifier(base_estimator=ada, n_estimators=50,
                             max_samples=1.0, max_features=1.0, bootstrap=True,
@@ -233,5 +233,7 @@ bag_clf = BaggingClassifier(base_estimator=ada, n_estimators=50,
 bag_clf.fit(X_train, y_train.ravel())
 
 print_score(bag_clf, X_train, X_test, y_train, y_test, train=True)
+print("\n******************************\n")
 print_score(bag_clf, X_train, X_test, y_train, y_test, train=False)
+# Test Result: accuracy score: 0.8367; ROC AUC: 0.5372
 
