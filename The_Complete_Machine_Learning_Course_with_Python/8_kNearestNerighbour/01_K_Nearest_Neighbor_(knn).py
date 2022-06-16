@@ -87,8 +87,8 @@ species_to_num = {'setosa': 0,
 df['species'] = df['species'].map(species_to_num)
 y_train = df['species']
 
-from sklearn.neighbors import KNeighborsClassifier
 
+from sklearn.neighbors import KNeighborsClassifier
 knn = KNeighborsClassifier(n_neighbors=50)
 knn.fit(X_train, y_train)
 
@@ -110,7 +110,6 @@ plt.scatter(X_train.values[:, 0], X_train.values[:, 1], c=y_train, s=40,
             alpha=0.9, edgecolors='k')
 
 """
-
 ## DistanceMetric class documentation
 [scikit-learn]()
 
@@ -162,6 +161,4 @@ $\left \| x \right \|$ where $x$ can be a vector or a matrix.
   * It is a distance measure that can represent how a king moves in the game of chess or, in warehouse logistics, the operations required by an overhead crane to move a crate from one place to another. 
   * In machine learning, the Chebyshev distance can prove useful when you have many dimensions to consider and most of them are just irrelevant or redundant (in Chebyshev, you just pick the one whose absolute difference is the largest). 
   * In the example used in previous sections, the distance is simply 2, the max between abs(1–3) and abs(2–3).
-
-
 """
