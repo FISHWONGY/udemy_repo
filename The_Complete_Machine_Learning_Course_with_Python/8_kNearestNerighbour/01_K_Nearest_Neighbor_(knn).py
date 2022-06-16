@@ -1,4 +1,3 @@
-# Commented out IPython magic to ensure Python compatibility.
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -8,20 +7,17 @@ sns.set_style('whitegrid')
 
 """
 # k-Nearest Neighbor (KNN)
-
 [wikipedia](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)
 
 Classification and Regression
 
 * Lazy learner
-
   * [Instance Based](https://en.wikipedia.org/wiki/Instance-based_learning)
   * Lazy because it does not try to learn a function from the training data. 
   * It memorise the pattern from the dataset
 
 
 * [Nonparametric model](http://blog.minitab.com/blog/adventures-in-statistics-2/choosing-between-a-nonparametric-test-and-a-parametric-test)
-
   * distribution-free tests because no assumption of the data needing to follow a specific distribution
   * [wikipedia](https://en.wikipedia.org/wiki/Nonparametric_statistics)
   * Other examples - Decision Tree, Random Forest
@@ -29,7 +25,6 @@ Classification and Regression
 
 
 Used for:
-
 * Predict cancer is malignant or benign
 * Pattern recognition
 * Recommender Systems
@@ -38,42 +33,28 @@ Used for:
 * Protein-Protein Interaction and 3D Structure Prediction
 
 ## Disadvantages
-
 * Not efficient on big data
 * Curse of dimensionality. Very susceptible to overfitting
 
 References:
-
 * [Wikipedia](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm)
-
 * [Scikit-Learn Nearest Neighbours](http://scikit-learn.org/stable/modules/neighbors.html)
-
 * [Introduction to k-nearest neighbors : Simplified](https://www.analyticsvidhya.com/blog/2014/10/introduction-k-neighbours-algorithm-clustering/)
-
 * [Quora](https://www.quora.com/What-are-industry-applications-of-the-K-nearest-neighbor-algorithm)
-
 * [Kevin Zakka](https://kevinzakka.github.io/2016/07/13/k-nearest-neighbor/)
-
 * [CS231n CNN](http://cs231n.github.io/classification/#nn)
-
 * [A Detailed Introduction to K-Nearest Neighbor (KNN) Algorithm](https://saravananthirumuruganathan.wordpress.com/2010/05/17/a-detailed-introduction-to-k-nearest-neighbor-knn-algorithm/)
-
 * [Chris Albon](https://chrisalbon.com/)
-
 * [K-Nearest Neighbors for Machine Learning](https://machinelearningmastery.com/k-nearest-neighbors-for-machine-learning/)
-
 * [Introduction to Data Mining](http://www-users.cs.umn.edu/~kumar/dmbook/index.php)
-
 * [Machine Learning Basics with the KNN algo](https://towardsdatascience.com/machine-learning-basics-with-the-k-nearest-neighbors-algorithm-6a6e71d01761)
 
-## Steps:
 
+## Steps:
 * Choose the number of $k$
 * Select a distance metric
 * Find the k nearest neighbors of the sample
 * Assign the class label by majority vote
-
-***
 """
 
 
@@ -92,7 +73,7 @@ from sklearn.neighbors import KNeighborsClassifier
 knn = KNeighborsClassifier(n_neighbors=50)
 knn.fit(X_train, y_train)
 
-Xv = X_train.values.reshape(-1,1)
+Xv = X_train.values.reshape(-1, 1)
 h = 0.02
 x_min, x_max = Xv.min(), Xv.max() + 1
 y_min, y_max = y_train.min(), y_train.max() + 1
@@ -103,8 +84,7 @@ z = knn.predict(np.c_[xx.ravel(), yy.ravel()])
 z = z.reshape(xx.shape)
 
 fig = plt.figure(figsize=(8, 5))
-
-ax = plt.contourf(xx, yy, z, cmap = 'afmhot', alpha=0.3, 
+ax = plt.contourf(xx, yy, z, cmap='afmhot', alpha=0.3,
                   )
 plt.scatter(X_train.values[:, 0], X_train.values[:, 1], c=y_train, s=40, 
             alpha=0.9, edgecolors='k')
