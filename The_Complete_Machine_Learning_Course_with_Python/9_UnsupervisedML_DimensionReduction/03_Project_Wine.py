@@ -5,7 +5,8 @@ import seaborn as sns
 sns.set()
 
 # !wget https://archive.ics.uci.edu/ml/machine-learning-databases/wine/wine.data
-df = pd.read_csv('wine.data', header=None)
+df = pd.read_csv('/Users/yuawong/Documents/GitHub/udemy_repo/The_Complete_Machine_Learning_Course_with_Python/'
+                 'data/wine.data', header=None)
 df.shape
 
 df.head()
@@ -42,8 +43,10 @@ pca.fit(X_train_sc)
 pca.explained_variance_ratio_
 
 print(np.round(pca.explained_variance_ratio_, 3))
+# 1st pca component explain 36% of data, the 2nd explained 18.7%
 
 pd.DataFrame(np.round(pca.components_, 3), columns=X.columns).T
+# 0 = PCA component 1, 1 = PCA component 2
 
 """No preconceived idea of the number of PCAs we want"""
 
@@ -59,7 +62,7 @@ np.cumsum(pca.explained_variance_ratio_)
 plt.plot(np.cumsum(pca.explained_variance_ratio_)*100.)
 plt.xlabel('number of components')
 plt.ylabel('cummulative explained variance');
-
+# If want to have 80% of variance to be explained, 4 component required, if 90%, 6 component
 
 res = pca.transform(X_train_sc)
 index_name = ['PCA_'+str(k) for k in range(0, len(res))]
