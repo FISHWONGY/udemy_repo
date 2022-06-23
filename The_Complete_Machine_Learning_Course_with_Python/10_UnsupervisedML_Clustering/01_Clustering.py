@@ -126,10 +126,11 @@ plt.scatter(X[:, 0], X[:, 1], s=10);
 from scipy.cluster.hierarchy import ward, dendrogram, linkage
 np.set_printoptions(precision=4, suppress=True)
 
+# Distance is bbased on linkage, we are using 'ward' method here
 distance = linkage(X, 'ward')
 
-"""## Dendrogram"""
 
+"""## Dendrogram"""
 plt.figure(figsize=(25, 10))
 plt.title("Hierachical Clustering Dendrogram")
 plt.xlabel("Index")
@@ -146,8 +147,8 @@ dendrogram(distance, orientation="left",
            leaf_rotation=90.,
            leaf_font_size=9.,)
 
-"""# Truncating Dendrogram"""
 
+"""# Truncating Dendrogram"""
 plt.figure(figsize=(25, 10))
 plt.title("Hierachical Clustering Dendrogram")
 plt.xlabel("Index")
@@ -186,9 +187,11 @@ plt.scatter(X[:, 0], X[:, 1], c=clusters, cmap='prism')
 k = 5
 clusters = fcluster(distance, k, criterion='maxclust')
 
-plt.figure(figsize=(10,8))
-plt.scatter(X[:,0], X[:,1], c=clusters, cmap='prism')
+plt.figure(figsize=(10, 8))
+plt.scatter(X[:, 0], X[:, 1], c=clusters, cmap='prism')
 
+
+# K-Means Clustering
 """
 # k-Means Clustering
 
@@ -211,9 +214,7 @@ How does it work?
 * Note that the centroids are not, in general, points from, although they live in the same space. 
 * The K-means algorithm aims to choose centroids that minimise the inertia, or **within-cluster sum of squared criterion**
 """
-
 from sklearn.cluster import KMeans
-
 kmeans = KMeans(n_clusters=9)
 kmeans.fit(X)
 
@@ -228,25 +229,22 @@ from mlxtend.plotting import plot_decision_regions
 plot_decision_regions(X, y, clf=kmeans)
 
 """Some Challenges:
-
 * The globally optimal result may not be achieved
-
 * The number of clusters must be selected beforehand
-
 * k-means is limited to linear cluster boundaries
-
 * k-means can be slow for large numbers of samples
-
 ***
+"""
+
+
 # Elbow Method
-
-
+"""
 * Use intrinsic metrics 
 * An example fo this is the **within-cluster Sums of Squared Error** 
 * scikit learn has already provided it via `inertia_` attribute
 """
 
-kmeans.inertia_
+print(kmeans.inertia_)
 
 sse_ = []
 for k in range(1, 8):
@@ -282,17 +280,12 @@ for k in range(2, 8):
 plt.plot(pd.DataFrame(sse_)[0], pd.DataFrame(sse_)[1])
 
 """****
-
 # Mean Shift
-
-
 [wikipedia](https://en.wikipedia.org/wiki/Mean_shift)
 
 * [Non-parametric](https://en.wikipedia.org/wiki/Nonparametric_statistics)
 
-
 * Identify centroids location
-
   * For each data point, it identifies a window around it
   * Computes centroid
   * Updates centroid location
@@ -300,12 +293,9 @@ plt.plot(pd.DataFrame(sse_)[0], pd.DataFrame(sse_)[1])
   * Keep shifting the centroids, means, towards the peaks of each cluster. Hence the term Means Shift
   * Continues until centroids no longer move
 
-
 * Used for object tracking
 """
-
 from sklearn.cluster import MeanShift, estimate_bandwidth
-
 from itertools import cycle
 
 bandwidth_X = estimate_bandwidth(X, quantile=0.1, n_samples=len(X))
@@ -317,11 +307,12 @@ cluster_centers = meanshift_model.cluster_centers_
 
 print('\nCenters of clusters: \n', cluster_centers)
 
+# Find number of cluster
 labels = meanshift_model.labels_
 num_clusters = len(np.unique(labels))
 print('\nNumber of clusters in input data =', num_clusters)
 
-plt.figure(figsize=(10,8))
+plt.figure(figsize=(10, 8))
 markers = '*vosx'
 for i, marker in zip(range(num_clusters), markers):
     plt.scatter(X[labels == i, 0], X[labels == i, 1], marker=marker, color='orange')
