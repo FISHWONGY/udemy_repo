@@ -13,7 +13,8 @@ Applying PCA. PCA - 80% of variance.
 """
 
 # !wget http://archive.ics.uci.edu/ml/machine-learning-databases/abalone/abalone.data
-df1 = pd.read_csv('abalone.data', header=None)
+df1 = pd.read_csv('./udemy_repo/The_Complete_Machine_Learning_Course_with_Python/'
+                  'data/abalone.data', header=None)
 df1.head()
 
 X = df1.iloc[:, 1:]
@@ -33,4 +34,6 @@ np.cumsum(pca.explained_variance_ratio_)
 plt.plot(np.cumsum(pca.explained_variance_ratio_)*100.)
 plt.xlabel('number of components')
 plt.ylabel('cummulative explained variance')
+
+# Only the 1st component already able to achieve 84% of variance
 
