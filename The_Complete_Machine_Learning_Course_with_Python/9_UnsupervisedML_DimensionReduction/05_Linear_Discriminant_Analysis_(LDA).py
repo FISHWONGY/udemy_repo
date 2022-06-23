@@ -37,7 +37,7 @@ xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
 z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
 z = z.reshape(xx.shape)
 fig = plt.figure(figsize=(8,8))
-ax = plt.contourf(xx, yy, z, cmap = 'afmhot', alpha=0.3);
+ax = plt.contourf(xx, yy, z, cmap='afmhot', alpha=0.3);
 plt.scatter(X.values[:, 0], X.values[:, 1], c=y, s=80, 
             alpha=0.9, edgecolors='g');
 
@@ -75,7 +75,7 @@ lda = LinearDiscriminantAnalysis(n_components=2)
 X_r2 = lda.fit(X, y).transform(X)
 
 # Percentage of variance explained for each components
-print('explained variance ratio (first two components): %s')
+print('explained variance ratio (first two components):' + str(pca.explained_variance_ratio_))
 #       % str(pca.explained_variance_ratio_))
 
 plt.figure()
