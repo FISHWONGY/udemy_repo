@@ -1,4 +1,5 @@
 # Getting Started
+import matplotlib.pyplot as plt
 import tensorflow as tf
 ## Problem Statement
 """
@@ -94,6 +95,10 @@ history = model.fit(X, y, epochs=1000, verbose=False)
 *   High loss means high error. 
 *   By plotting is over epoch, we can visualise the error / accuracy over epoch.
 """
+import matplotlib.pyplot as plt
+plt.xlabel('Epoch Number')
+plt.ylabel('Loss Magnitude')
+plt.plot(history.history('loss'))
 
 print(0-9)
 
