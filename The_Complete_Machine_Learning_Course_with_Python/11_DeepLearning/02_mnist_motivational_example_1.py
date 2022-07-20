@@ -35,12 +35,19 @@ x_train, x_test = x_train / 255.0, x_test / 255.0
 
 Our network has three layers:
 
-* **First Layer: input** `tf.keras.layers.Flatten` — This layer flattens the digit images from a 2d-array of 28 $\times$ 28 pixels, to a 1d-array of 784 pixels (28\*28). This layer only reformats the data.
+* **First Layer: input** `tf.keras.layers.Flatten` — 
+This layer flattens the digit images from a 2d-array of 28 $\times$ 28 pixels, 
+to a 1d-array of 784 pixels (28\*28). This layer only reformats the data.
 
-* **Second Layer: "hidden"** `tf.keras.layers.Dense`— A densely connected layer of 512 neurons. Each neuron (or node) takes input from all 784 nodes in the previous layer. Recall that we flattened the image. 
+* **Second Layer: "hidden"** `tf.keras.layers.Dense`— A densely connected layer of 512 neurons. 
+Each neuron (or node) takes input from all 784 nodes in the previous layer. Recall that we flattened the image. 
 
 
-* **output** `tf.keras.layers.Dense` — A 10-node *softmax* layer, with each node representing each of the digit class. As in the previous layer, each node takes input from the 512 nodes in the layer before it. Each node weights the input according to learned parameters, and then outputs a value in the range `[0, 1]`, representing the probability that the image belongs to that class. The sum of all 10 node values is 1.
+* **output** `tf.keras.layers.Dense` — A 10-node *softmax* layer, 
+with each node representing each of the digit class. 
+As in the previous layer, each node takes input from the 512 nodes in the layer before it. 
+Each node weights the input according to learned parameters, and then outputs a value in the range `[0, 1]`, 
+representing the probability that the image belongs to that class. The sum of all 10 node values is 1.
 """
 
 model = tf.keras.Sequential([
@@ -63,7 +70,8 @@ plt.plot(h.history['loss'])
 eval_loss, eval_acc = model.evaluate(x_test, 
                                      y_test)
 print('Test accuracy: {}'.format(eval_acc))
-
+# Test accuracy: 0.9797999858856201
+# This model is a bit over-trained & overfitting, since the accuracy @ epoch 10 uis way higher than print('Test accuracy: {}'.format(eval_acc))
 """### Model 2"""
 
 model2 = tf.keras.models.Sequential([
@@ -85,9 +93,11 @@ plt.xlabel('Epoch Number')
 plt.ylabel("Loss Magnitude")
 plt.plot(h.history['loss'])
 
-eval_loss, eval_acc = model2.evaluate(x_test, 
+eval_loss, eval_acc = model2.evaluate(x_test,
                                       y_test)
 print('Test accuracy: {}'.format(eval_acc))
+# Test accuracy: 0.9765999913215637
+# This model is not over-train/over fit, since its accuracy @ epoxh 10 is similar to print('Test accuracy: {}'.format(eval_acc))
 
 """***"""
 
@@ -99,9 +109,11 @@ print(img.shape)
 prediction = model2.predict(img)
 np.set_printoptions(formatter={'float': '{: 0.2f}'.format})
 print(prediction * 100)
+# 99.86% that this img is 7
 
 np.argmax(prediction[0])
+# Prediction - 7
 
 print(y_test[0])
-
+# Actual label - 7
 """***"""
