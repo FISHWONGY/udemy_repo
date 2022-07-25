@@ -9,7 +9,6 @@
 
 # Import the toolkit and the full Porter Stemmer library
 import nltk
-
 from nltk.stem.porter import *
 p_stemmer = PorterStemmer()
 

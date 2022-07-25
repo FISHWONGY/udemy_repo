@@ -78,6 +78,9 @@ for token in doc8:
 print('\n----')
 
 for ent in doc8.ents:
+    print(ent)
+
+for ent in doc8.ents:
     print(ent.text+' - '+ent.label_+' - '+str(spacy.explain(ent.label_)))
 
 
