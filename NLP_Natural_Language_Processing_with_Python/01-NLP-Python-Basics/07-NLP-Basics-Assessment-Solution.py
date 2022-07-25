@@ -60,13 +60,20 @@ matcher.add('Swimming', [pattern])
 
 found_matches = matcher(doc)
 print(found_matches)
-
+# [(12881893835109366681, 1274, 1277), (12881893835109366681, 3609, 3612)]
 
 # **7. Print the text surrounding each found match**
-print(doc[1274:1277])
+print(doc[1265:1290])
 
-print(doc[3609:3612])
+print(doc[3600:3615])
 
+
+def surrounding(doc, start, end):
+    print(doc[start-15: end+15])
+
+
+surrounding(doc, 1274, 1277)
+surrounding(doc, 3609, 3612)
 
 # **EXTRA CREDIT:<br>Print the *sentence* that contains each found match**
 for sent in sents:
