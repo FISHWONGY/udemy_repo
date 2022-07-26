@@ -58,11 +58,11 @@ doc = nlp(u"The quick brown fox jumped over the lazy dog's back.")
 
 # Count the frequencies of different coarse-grained POS tags:
 POS_counts = doc.count_by(spacy.attrs.POS)
-POS_counts
+print(POS_counts)
 
 
 # This isn't very helpful until you decode the attribute ID:
-doc.vocab[83].text
+print(doc.vocab[83].text)
 
 
 # ### Create a frequency list of POS tags from the entire document

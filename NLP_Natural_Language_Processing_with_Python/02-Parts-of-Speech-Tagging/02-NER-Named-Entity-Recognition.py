@@ -4,6 +4,7 @@
 import spacy
 nlp = spacy.load('en_core_web_sm')
 
+
 # Write a function to display basic entity info:
 def show_ents(doc):
     if doc.ents:
@@ -121,7 +122,7 @@ matcher.add('newproduct', None, *phrase_patterns)
 matches = matcher(doc)
 
 # See what matches occur:
-matches
+print(matches)
 
 
 # Here we create Spans from each match, and create named entities from them:
@@ -129,7 +130,7 @@ from spacy.tokens import Span
 
 PROD = doc.vocab.strings[u'PRODUCT']
 
-new_ents = [Span(doc, match[1],match[2],label=PROD) for match in matches]
+new_ents = [Span(doc, match[1], match[2], label=PROD) for match in matches]
 
 doc.ents = list(doc.ents) + new_ents
 
@@ -144,8 +145,8 @@ doc = nlp(u'Originally priced at $29.50, the sweater was marked down to five dol
 
 show_ents(doc)
 
-
-len([ent for ent in doc.ents if ent.label_=='MONEY'])
+print([ent for ent in doc.ents if ent.label_ == 'MONEY'])
+print(len([ent for ent in doc.ents if ent.label_ == 'MONEY']))
 
 
 # ## <font color=blue>Problem with Line Breaks</font>

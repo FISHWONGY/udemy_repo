@@ -21,7 +21,7 @@ print(doc.sents[1])
 
 # However, you *can* build a sentence collection by running `doc.sents` and saving the result to a list:
 doc_sents = [sent for sent in doc.sents]
-doc_sents
+print(doc_sents)
 
 
 # **NOTE**: `list(doc.sents)` also works. We show a list comprehension as it allows you to pass in conditionals.
@@ -65,9 +65,10 @@ def set_custom_boundaries(doc):
             doc[token.i+1].is_sent_start = True
     return doc
 
+
 nlp.add_pipe(set_custom_boundaries, before='parser')
 
-nlp.pipe_names
+print(nlp.pipe_names)
 
 
 # The new rule has to run before the document is parsed. Here we can either pass the argument `before='parser'` or `first=True`.
