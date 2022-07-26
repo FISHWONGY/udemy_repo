@@ -2,54 +2,52 @@
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('../TextFiles/smsspamcollection.tsv', sep='\t')
-df.head()
+df = pd.read_csv('./udemy_repo/NLP_Natural_Language_Processing_with_Python/TextFiles/smsspamcollection.tsv', sep='\t')
+print(df.head())
 
-len(df)
+print(len(df))
 
 
 # ## Check for missing values:
-df.isnull().sum()
+print(df.isnull().sum())
 
 
 # ## Take a quick look at the *ham* and *spam* `label` column:
-df['label'].unique()
+print(df['label'].unique())
 
-df['label'].value_counts()
+print(df['label'].value_counts())
 
 
 # We see that 4825 out of 5572 messages, or 86.6%, are ham.<br>This means that any machine learning model we create has to perform **better than 86.6%** to beat random chance.</font>
 
 # ## Visualize the data:
 # Since we're not ready to do anything with the message text, let's see if we can predict ham/spam labels based on message length and punctuation counts. We'll look at message `length` first:
-df['length'].describe()
+print(df['length'].describe())
 
 
 # This dataset is extremely skewed. The mean value is 80.5 and yet the max length is 910. Let's plot this on a logarithmic x-axis.</font>
-
-from IPython import get_ipython
 import matplotlib.pyplot as plt
-get_ipython().run_line_magic('inline')
+
 
 plt.xscale('log')
-bins = 1.15**(np.arange(0,50))
-plt.hist(df[df['label']=='ham']['length'],bins=bins,alpha=0.8)
-plt.hist(df[df['label']=='spam']['length'],bins=bins,alpha=0.8)
-plt.legend(('ham','spam'))
+bins = 1.15**(np.arange(0, 50))
+plt.hist(df[df['label'] == 'ham']['length'], bins=bins, alpha=0.8)
+plt.hist(df[df['label'] == 'spam']['length'], bins=bins, alpha=0.8)
+plt.legend(('ham', 'spam'))
 plt.show()
 
 
 # It looks like there's a small range of values where a message is more likely to be spam than ham.</font>
 # 
 # Now let's look at the `punct` column:
-df['punct'].describe()
+print(df['punct'].describe())
 
 
 plt.xscale('log')
 bins = 1.5**(np.arange(0, 15))
-plt.hist(df[df['label']=='ham']['punct'],bins=bins,alpha=0.8)
-plt.hist(df[df['label']=='spam']['punct'],bins=bins,alpha=0.8)
-plt.legend(('ham','spam'))
+plt.hist(df[df['label'] == 'ham']['punct'], bins=bins, alpha=0.8)
+plt.hist(df[df['label'] == 'spam']['punct'], bins=bins, alpha=0.8)
+plt.legend(('ham', 'spam'))
 plt.show()
 
 
