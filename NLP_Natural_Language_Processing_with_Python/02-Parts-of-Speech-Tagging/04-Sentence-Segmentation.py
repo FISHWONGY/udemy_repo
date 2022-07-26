@@ -77,7 +77,8 @@ nlp.add_pipe("set_custom_boundaries", before='parser')
 print(nlp.pipe_names)
 
 
-# The new rule has to run before the document is parsed. Here we can either pass the argument `before='parser'` or `first=True`.
+# The new rule has to run before the document is parsed.
+# Here we can either pass the argument `before='parser'` or `first=True`.
 
 # Re-run the Doc object creation:
 doc4 = nlp(u'"Management is doing things right; leadership is doing the right things." -Peter Drucker')
@@ -94,7 +95,7 @@ for sent in doc3.sents:
 # ### Why not change the token directly?
 # Why not simply set the `.is_sent_start` value to True on existing tokens?
 # Find the token we want to change:
-doc3[7]
+print(doc3[7])
 
 
 # Try to change the .is_sent_start attribute:
@@ -115,9 +116,10 @@ doc = nlp(mystring)
 for sent in doc.sents:
     print([token.text for token in sent])
 
-
-# CHANGING THE RULES
+print(mystring)
+"""# CHANGING THE RULES
 from spacy.pipeline import SentenceSegmenter
+
 
 def split_on_newlines(doc):
     start = 0
@@ -133,12 +135,14 @@ def split_on_newlines(doc):
 
 
 sbd = SentenceSegmenter(nlp.vocab, strategy=split_on_newlines)
-nlp.add_pipe(sbd)
+nlp.add_pipe(sbd)"""
+nlp.add_pipe("sentencizer")
 
 
 # While the function `split_on_newlines` can be named anything we want, it's important to use the name `sbd` for the SentenceSegmenter.</font>
 
 doc = nlp(mystring)
+print(mystring)
 for sent in doc.sents:
     print([token.text for token in sent])
 

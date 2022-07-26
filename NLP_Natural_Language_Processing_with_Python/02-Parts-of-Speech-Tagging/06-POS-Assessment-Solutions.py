@@ -5,10 +5,6 @@ from spacy import displacy
 
 # **1. Create a Doc object from the file `peterrabbit.txt`**<br>
 # > HINT: Use `with open('../TextFiles/peterrabbit.txt') as f:`
-
-# In[2]:
-
-
 with open('./udemy_repo/NLP_Natural_Language_Processing_with_Python/TextFiles/peterrabbit.txt') as f:
     doc = nlp(f.read())
 
@@ -23,14 +19,14 @@ for token in list(doc.sents)[2]:
 POS_counts = doc.count_by(spacy.attrs.POS)
 
 for k, v in sorted(POS_counts.items()):
-    print(f'{k}. {doc.vocab[k].text:{5}}: {v}')
+    print(f'{k}. {doc.vocab[k].text:{5}}: {v} counts')
 
 
 # **4. CHALLENGE: What percentage of tokens are nouns?**<br>
-# HINT: the attribute ID for 'NOUN' is 91
-percent = 100*POS_counts[91]/len(doc)
+# HINT: the attribute ID for 'NOUN' is 92
+percent = 100*POS_counts[92]/len(doc)
 
-print(f'{POS_counts[91]}/{len(doc)} = {percent:{.4}}%')
+print(f'{POS_counts[92]}/{len(doc)} = {percent:{.4}}%')
 
 
 # **5. Display the Dependency Parse for the third sentence**
@@ -43,13 +39,13 @@ for ent in doc.ents[:2]:
 
 
 # **7. How many sentences are contained in *The Tale of Peter Rabbit*?**
-len([sent for sent in doc.sents])
+print(len([sent for sent in doc.sents]))
 
 
 # **8. CHALLENGE: How many sentences contain named entities?**
 list_of_sents = [nlp(sent.text) for sent in doc.sents]
 list_of_ners = [doc for doc in list_of_sents if doc.ents]
-len(list_of_ners)
+print(len(list_of_ners))
 
 
 # **9. CHALLENGE: Display the named entity visualization for `list_of_sents[0]` from the previous problem**
