@@ -161,12 +161,18 @@ show_ents(doc)
 # ### However, there is a simple fix that can be added to the nlp pipeline
 
 # Quick function to remove ents formed on whitespace:
+# Code changed due to Spacy v3
+from spacy.language import Language
+
+
+@Language.component("remove_whitespace_entities")
 def remove_whitespace_entities(doc):
     doc.ents = [e for e in doc.ents if not e.text.isspace()]
     return doc
 
+
 # Insert this into the pipeline AFTER the ner component:
-nlp.add_pipe(remove_whitespace_entities, after='ner')
+nlp.add_pipe("remove_whitespace_entities", after='ner')
 
 # Rerun nlp on the text above, and show ents:
 doc = nlp(u'Originally priced at $29.50,\nthe sweater was marked down to five dollars.')

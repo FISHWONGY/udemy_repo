@@ -59,6 +59,12 @@ for sent in doc3.sents:
 
 
 # ADD A NEW RULE TO THE PIPELINE
+# From Spacy V3, the old code isn't running anymore
+
+from spacy.language import Language
+
+
+@Language.component("set_custom_boundaries")
 def set_custom_boundaries(doc):
     for token in doc[:-1]:
         if token.text == ';':
@@ -66,7 +72,7 @@ def set_custom_boundaries(doc):
     return doc
 
 
-nlp.add_pipe(set_custom_boundaries, before='parser')
+nlp.add_pipe("set_custom_boundaries", before='parser')
 
 print(nlp.pipe_names)
 
