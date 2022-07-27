@@ -1,6 +1,8 @@
 # # Scikit-learn Primer
 import numpy as np
 import pandas as pd
+import warnings
+warnings.filterwarnings("ignore")
 
 df = pd.read_csv('./udemy_repo/NLP_Natural_Language_Processing_with_Python/TextFiles/smsspamcollection.tsv', sep='\t')
 print(df.head())
@@ -261,3 +263,42 @@ print(metrics.confusion_matrix(y_test, predictions))
 print(metrics.classification_report(y_test, predictions))
 print(metrics.accuracy_score(y_test, predictions))
 # 0.888526
+
+
+from xgboost import XGBClassifier
+from sklearn.model_selection import RandomizedSearchCV
+# Random Search w/ XGBoost
+params = {
+    'n_estimators': [500],
+    'min_child_weight': [4, 5],
+    'gamma': [i/10.0 for i in range(3, 6)],
+    'subsample': [i/10.0 for i in range(6, 11)],
+    'colsample_bytree': [i/10.0 for i in range(6, 11)],
+    'max_depth': [2, 3, 4, 6, 7],
+    'objective': ['reg:squarederror', 'reg:tweedie'],
+    'booster': ['gbtree', 'gblinear'],
+    'eval_metric': ['rmse'],
+    'eta': [i/10.0 for i in range(3, 6)],
+}
+
+reg = XGBClassifier(nthread=-1)
+
+# run randomized search
+random_search_xgb = RandomizedSearchCV(reg, param_distributions=params,
+                                       n_iter=10,
+                                       scoring='accuracy', n_jobs=4, cv=5, refit=True,
+                                       return_train_score=True)
+
+# Fit to the training data
+random_search_xgb.fit(X_train, y_train)
+
+# Get best params
+print(random_search_xgb.best_params_)
+# {'subsample': 0.7, 'objective': 'reg:tweedie', 'n_estimators': 500, 'min_child_weight': 4, 'max_depth': 2, 'gamma': 0.3, 'eval_metric': 'rmse', 'eta': 0.4, 'colsample_bytree': 0.8, 'booster': 'gbtree'}
+print(random_search_xgb.best_score_)
+# 0.8893
+
+print_score(random_search_xgb, X_train, y_train, X_test, y_test, train=True)
+print("\n******************************\n")
+print_score(random_search_xgb, X_train, y_train, X_test, y_test, train=False)
+# accuracy score: 0.8853

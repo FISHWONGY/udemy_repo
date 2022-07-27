@@ -13,28 +13,28 @@
 vocab = {}
 i = 1
 
-with open('1.txt') as f:
+with open('./udemy_repo/NLP_Natural_Language_Processing_with_Python/03-Text-Classification/1.txt') as f:
     x = f.read().lower().split()
 
 for word in x:
     if word in vocab:
         continue
     else:
-        vocab[word]=i
-        i+=1
+        vocab[word] = i
+        i += 1
 
 print(vocab)
 
 
-with open('2.txt') as f:
+with open('./udemy_repo/NLP_Natural_Language_Processing_with_Python/03-Text-Classification/2.txt') as f:
     x = f.read().lower().split()
 
 for word in x:
     if word in vocab:
         continue
     else:
-        vocab[word]=i
-        i+=1
+        vocab[word] = i
+        i += 1
 
 print(vocab)
 
@@ -44,29 +44,29 @@ print(vocab)
 # Now that we've encapsulated our "entire language" in a dictionary, let's perform *feature extraction* on each of our original documents:
 
 # Create an empty vector with space for each word in the vocabulary:
-one = ['1.txt']+[0]*len(vocab)
-one
+one = ['1.txt'] + [0]*len(vocab)
+print(one)
 
 
 # map the frequencies of each word in 1.txt to our vector:
-with open('1.txt') as f:
+with open('./udemy_repo/NLP_Natural_Language_Processing_with_Python/03-Text-Classification/1.txt') as f:
     x = f.read().lower().split()
     
 for word in x:
-    one[vocab[word]]+=1
+    one[vocab[word]] += 1
     
-one
+print(one)
 
 
 # We can see that most of the words in 1.txt appear only once, although "cats" appears twice
 # Do the same for the second document:
 two = ['2.txt']+[0]*len(vocab)
 
-with open('2.txt') as f:
+with open('./udemy_repo/NLP_Natural_Language_Processing_with_Python/03-Text-Classification/2.txt') as f:
     x = f.read().lower().split()
     
 for word in x:
-    two[vocab[word]]+=1
+    two[vocab[word]] += 1
 
 
 # Compare the two vectors:
@@ -97,13 +97,13 @@ print(f'{one}\n{two}')
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('../TextFiles/smsspamcollection.tsv', sep='\t')
-df.head()
+df = pd.read_csv('./udemy_repo/NLP_Natural_Language_Processing_with_Python/TextFiles/smsspamcollection.tsv', sep='\t')
+print(df.head())
 
 
 # ## Check for missing values:
 # Always a good practice.
-df.isnull().sum()
+print(df.isnull().sum())
 
 
 # ## Take a quick look at the *ham* and *spam* `label` column:
@@ -126,7 +126,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 count_vect = CountVectorizer()
 
 X_train_counts = count_vect.fit_transform(X_train)
-X_train_counts.shape
+print(X_train_counts.shape)
 
 
 # This shows that our training set is comprised of 3733 documents, and 7082 features.
@@ -142,7 +142,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 tfidf_transformer = TfidfTransformer()
 
 X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
-X_train_tfidf.shape
+print(X_train_tfidf.shape)
 
 
 # Note: the `fit_transform()` method actually performs two operations: it fits an estimator to the data and then transforms our count-matrix to a tf-idf representation.
@@ -154,7 +154,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 vectorizer = TfidfVectorizer()
 
 X_train_tfidf = vectorizer.fit_transform(X_train) # remember to use the original X_train set
-X_train_tfidf.shape
+print(X_train_tfidf.shape)
 
 
 # ## Train a Classifier
@@ -190,15 +190,15 @@ predictions = text_clf.predict(X_test)
 
 # Report the confusion matrix
 from sklearn import metrics
-print(metrics.confusion_matrix(y_test,predictions))
+print(metrics.confusion_matrix(y_test, predictions))
 
 
 # Print a classification report
-print(metrics.classification_report(y_test,predictions))
+print(metrics.classification_report(y_test, predictions))
 
 
 # Print the overall accuracy
-print(metrics.accuracy_score(y_test,predictions))
+print(metrics.accuracy_score(y_test, predictions))
 
 
 # Using the text of the messages, our model performed exceedingly well; it correctly predicted spam **98.97%** of the time!<br>
