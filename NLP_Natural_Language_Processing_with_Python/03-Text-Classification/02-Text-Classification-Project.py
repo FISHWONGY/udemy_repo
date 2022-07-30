@@ -17,8 +17,8 @@
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('../TextFiles/moviereviews.tsv', sep='\t')
-df.head()
+df = pd.read_csv('./udemy_repo/NLP_Natural_Language_Processing_with_Python/TextFiles/moviereviews.tsv', sep='\t')
+print(df.head())
 
 len(df)
 
@@ -35,7 +35,7 @@ display(Markdown('> '+df['review'][0]))
 # 
 # ### Detect & remove NaN values:
 
-df.isnull().sum()
+print(df.isnull().sum())
 
 
 # 35 records show **NaN** (this stands for "not a number" and is equivalent to *None*). These are easily removed using the `.dropna()` pandas function.
@@ -43,7 +43,7 @@ df.isnull().sum()
 
 df.dropna(inplace=True)
 
-len(df)
+print(len(df))
 
 
 # ### Detect & remove empty strings
@@ -53,7 +53,7 @@ len(df)
 blanks = []  # start with an empty list
 
 for i, lb, rv in df.itertuples():  # iterate over the DataFrame
-    if type(rv)==str:            # avoid NaN values
+    if type(rv) == str:            # avoid NaN values
         if rv.isspace():         # test 'review' for whitespace
             blanks.append(i)     # add matching index numbers to the list
         
@@ -64,14 +64,14 @@ print(len(blanks), 'blanks: ', blanks)
 
 df.drop(blanks, inplace=True)
 
-len(df)
+print(len(df))
 
 
 # Great! We dropped 62 records from the original 2000. Let's continue with the analysis.
 
 # ## Take a quick look at the `label` column:
 
-df['label'].value_counts()
+print(df['label'].value_counts())
 
 
 # ## Split the data into train & test sets:
@@ -99,7 +99,7 @@ text_clf_nb = Pipeline([('tfidf', TfidfVectorizer()),
 
 # Linear SVC:
 text_clf_lsvc = Pipeline([('tfidf', TfidfVectorizer()),
-                     ('clf', LinearSVC()),
+                          ('clf', LinearSVC()),
 ])
 
 
@@ -115,22 +115,19 @@ predictions = text_clf_nb.predict(X_test)
 
 # Report the confusion matrix
 from sklearn import metrics
-print(metrics.confusion_matrix(y_test,predictions))
+print(metrics.confusion_matrix(y_test, predictions))
 
 
 # Print a classification report
-print(metrics.classification_report(y_test,predictions))
+print(metrics.classification_report(y_test, predictions))
 # Print the overall accuracy
-print(metrics.accuracy_score(y_test,predictions))
-
-
-# Naïve Bayes gave us better-than-average results at 76.4% for classifying reviews as positive or negative based on text alone. Let's see if we can do better.
+print(metrics.accuracy_score(y_test, predictions))
+# Naïve Bayes gave us better-than-average results at 76.4% for classifying reviews as positive or negative
+# based on text alone. Let's see if we can do better.
 
 # ## Feed the training data through the second pipeline
 # Next we'll run Linear SVC
-
 text_clf_lsvc.fit(X_train, y_train)
-
 
 # ## Run predictions and analyze the results (Linear SVC)
 # Form a prediction set
@@ -138,17 +135,15 @@ predictions = text_clf_lsvc.predict(X_test)
 
 # Report the confusion matrix
 from sklearn import metrics
-print(metrics.confusion_matrix(y_test,predictions))
-
+print(metrics.confusion_matrix(y_test, predictions))
 
 # Print a classification report
-print(metrics.classification_report(y_test,predictions))
+print(metrics.classification_report(y_test, predictions))
 
 # Print the overall accuracy
-print(metrics.accuracy_score(y_test,predictions))
-
-
-# Not bad! Based on text alone we correctly classified reviews as positive or negative **84.7%** of the time. In an upcoming section we'll try to improve this score even further by performing *sentiment analysis* on the reviews.
+print(metrics.accuracy_score(y_test, predictions))
+# Not bad! Based on text alone we correctly classified reviews as positive or negative **84.7%** of the time.
+# In an upcoming section we'll try to improve this score even further by performing *sentiment analysis* on the reviews.
 
 # ## Advanced Topic - Adding Stopwords to CountVectorizer
 # By default, **CountVectorizer** and **TfidfVectorizer** do *not* filter stopwords. However, they offer some optional settings, including passing in your own stopword list.
@@ -176,11 +171,11 @@ stopwords = ['a', 'about', 'an', 'and', 'are', 'as', 'at', 'be', 'been', 'but', 
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('../TextFiles/moviereviews.tsv', sep='\t')
+df = pd.read_csv('./udemy_repo/NLP_Natural_Language_Processing_with_Python/TextFiles/moviereviews.tsv', sep='\t')
 df.dropna(inplace=True)
 blanks = []
 for i, lb, rv in df.itertuples():
-    if type(rv)==str:
+    if type(rv) == str:
         if rv.isspace():
             blanks.append(i)
 df.drop(blanks, inplace=True)
@@ -207,9 +202,7 @@ text_clf_lsvc2.fit(X_train, y_train)
 predictions = text_clf_lsvc2.predict(X_test)
 print(metrics.confusion_matrix(y_test, predictions))
 
-
 print(metrics.classification_report(y_test, predictions))
-
 
 print(metrics.accuracy_score(y_test, predictions))
 
@@ -226,11 +219,11 @@ print(metrics.accuracy_score(y_test, predictions))
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('../TextFiles/moviereviews.tsv', sep='\t')
+df = pd.read_csv('./udemy_repo/NLP_Natural_Language_Processing_with_Python/TextFiles/moviereviews.tsv', sep='\t')
 df.dropna(inplace=True)
 blanks = []
-for i,lb,rv in df.itertuples():
-    if type(rv)==str:
+for i, lb, rv in df.itertuples():
+    if type(rv) == str:
         if rv.isspace():
             blanks.append(i)
 df.drop(blanks, inplace=True)
@@ -247,12 +240,12 @@ from sklearn import metrics
 
 # Naïve Bayes Model:
 text_clf_nb = Pipeline([('tfidf', TfidfVectorizer()),
-                     ('clf', MultinomialNB()),
+                        ('clf', MultinomialNB()),
 ])
 
 # Linear SVC Model:
 text_clf_lsvc = Pipeline([('tfidf', TfidfVectorizer()),
-                     ('clf', LinearSVC()),
+                          ('clf', LinearSVC()),
 ])
 
 # Train both models on the moviereviews.tsv training set:
@@ -261,21 +254,18 @@ text_clf_lsvc.fit(X_train, y_train)
 
 
 # ### Next, feed new data to the model's `predict()` method
-
-# In[26]:
-
-
 myreview = "A movie I really wanted to love was terrible. \
 I'm sure the producers had the best intentions, but the execution was lacking."
+print(text_clf_nb.predict([myreview]))  # be sure to put "myreview" inside square brackets
+
+print(text_clf_lsvc.predict([myreview]))
 
 # Use this space to write your own review. Experiment with different lengths and writing styles.
 myreview = 'This is good'
 
 print(text_clf_nb.predict([myreview]))  # be sure to put "myreview" inside square brackets
 
-
 print(text_clf_lsvc.predict([myreview]))
-
 
 # Great! Now you should be able to build text classification pipelines in scikit-learn, apply a variety of algorithms like naïve Bayes and Linear SVC, handle stopwords, and test a fitted model on new data.
 
