@@ -127,7 +127,7 @@ count_vect = CountVectorizer()
 
 X_train_counts = count_vect.fit_transform(X_train)
 print(X_train_counts.shape)
-
+# (3733, 7082)
 
 # This shows that our training set is comprised of 3733 documents, and 7082 features.
 
@@ -143,19 +143,21 @@ tfidf_transformer = TfidfTransformer()
 
 X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
 print(X_train_tfidf.shape)
-
+# (3733, 7082)
 
 # Note: the `fit_transform()` method actually performs two operations: it fits an estimator to the data and then transforms our count-matrix to a tf-idf representation.
 
 # ## Combine Steps with TfidVectorizer
 # In the future, we can combine the CountVectorizer and TfidTransformer steps into one using [TfidVectorizer](https://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html):
 
+##############################################################
+# We only need to do this
 from sklearn.feature_extraction.text import TfidfVectorizer
 vectorizer = TfidfVectorizer()
 
 X_train_tfidf = vectorizer.fit_transform(X_train) # remember to use the original X_train set
 print(X_train_tfidf.shape)
-
+# (3733, 7082)
 
 # ## Train a Classifier
 # Here we'll introduce an SVM classifier that's similar to SVC, called [LinearSVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html). LinearSVC handles sparse input better, and scales well to large numbers of samples.
@@ -199,7 +201,7 @@ print(metrics.classification_report(y_test, predictions))
 
 # Print the overall accuracy
 print(metrics.accuracy_score(y_test, predictions))
-
+# 0.989668297988037
 
 # Using the text of the messages, our model performed exceedingly well; it correctly predicted spam **98.97%** of the time!<br>
 # Now let's apply what we've learned to a text classification project involving positive and negative movie reviews.
