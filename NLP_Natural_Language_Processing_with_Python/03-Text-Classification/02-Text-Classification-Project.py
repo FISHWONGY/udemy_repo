@@ -20,7 +20,7 @@ import pandas as pd
 df = pd.read_csv('./udemy_repo/NLP_Natural_Language_Processing_with_Python/TextFiles/moviereviews.tsv', sep='\t')
 print(df.head())
 
-len(df)
+print(len(df))
 
 
 # ### Take a look at a typical review. This one is labeled "negative":
@@ -39,8 +39,8 @@ print(df.isnull().sum())
 
 
 # 35 records show **NaN** (this stands for "not a number" and is equivalent to *None*). These are easily removed using the `.dropna()` pandas function.
-# <div class="alert alert-info" style="margin: 20px">CAUTION: By setting inplace=True, we permanently affect the DataFrame currently in memory, and this can't be undone. However, it does *not* affect the original source data. If we needed to, we could always load the original DataFrame from scratch.</div>
-
+# CAUTION: By setting inplace=True, we permanently affect the DataFrame currently in memory, and this can't be undone. However, it does *not* affect the original source data. If we needed to, we could always load the original DataFrame from scratch.</div>
+# Drop NA
 df.dropna(inplace=True)
 
 print(len(df))
