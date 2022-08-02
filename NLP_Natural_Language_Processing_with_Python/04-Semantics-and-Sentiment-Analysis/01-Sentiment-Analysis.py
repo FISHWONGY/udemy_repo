@@ -30,15 +30,15 @@ sid = SentimentIntensityAnalyzer()
 # * compound *(computed by normalizing the scores above)*
 
 a = 'This was a good movie.'
-sid.polarity_scores(a)
+print(sid.polarity_scores(a))
 
 
 a = 'This was the best, most awesome movie EVER MADE!!!'
-sid.polarity_scores(a)
+print(sid.polarity_scores(a))
 
 
 a = 'This was the worst film to ever disgrace the screen.'
-sid.polarity_scores(a)
+print(sid.polarity_scores(a))
 
 
 # ## Use VADER to analyze Amazon Reviews
@@ -46,7 +46,7 @@ sid.polarity_scores(a)
 import pandas as pd
 
 df = pd.read_csv('./udemy_repo/NLP_Natural_Language_Processing_with_Python/TextFiles/amazonreviews.tsv', sep='\t')
-df.head()
+print(df.head())
 df['label'].value_counts()
 
 
@@ -71,7 +71,7 @@ print(df['label'].value_counts())
 # In this case there were no empty records. Good!
 
 # ## Let's run the first review through VADER
-sid.polarity_scores(df.loc[0]['review'])
+print(sid.polarity_scores(df.loc[0]['review']))
 
 print(df.loc[0]['label'])
 
@@ -88,7 +88,7 @@ df['compound'] = df['scores'].apply(lambda score_dict: score_dict['compound'])
 
 print(df.head())
 
-df['comp_score'] = df['compound'].apply(lambda c: 'pos' if c >=0 else 'neg')
+df['comp_score'] = df['compound'].apply(lambda c: 'pos' if c >= 0 else 'neg')
 
 print(df.head())
 
@@ -97,10 +97,9 @@ print(df.head())
 # Finally, we'll use scikit-learn to determine how close VADER came to our original 10,000 labels.
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-accuracy_score(df['label'], df['comp_score'])
+print(accuracy_score(df['label'], df['comp_score']))
 print(classification_report(df['label'], df['comp_score']))
 print(confusion_matrix(df['label'], df['comp_score']))
-
 
 # This tells us that VADER correctly identified an Amazon review as "positive" or "negative" roughly 71% of the time.
 # ## Up Next: Sentiment Analysis Project
