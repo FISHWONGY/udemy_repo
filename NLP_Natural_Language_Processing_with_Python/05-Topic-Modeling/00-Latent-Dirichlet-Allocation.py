@@ -4,8 +4,8 @@
 # 
 # We will be using articles from NPR (National Public Radio), obtained from their website [www.npr.org](http://www.npr.org)
 import pandas as pd
-npr = pd.read_csv('npr.csv')
-npr.head()
+npr = pd.read_csv('./udemy_repo/NLP_Natural_Language_Processing_with_Python/05-Topic-Modeling/npr.csv')
+print(npr.head())
 
 
 # Notice how we don't have the topic of the articles! Let's use LDA to attempt to figure out clusters of the articles.
@@ -20,38 +20,36 @@ cv = CountVectorizer(max_df=0.95, min_df=2, stop_words='english')
 
 dtm = cv.fit_transform(npr['Article'])
 
-dtm
+print(dtm)
 
 
 # ## LDA
 from sklearn.decomposition import LatentDirichletAllocation
-LDA = LatentDirichletAllocation(n_components=7,random_state=42)
+LDA = LatentDirichletAllocation(n_components=7, random_state=42)
 
 # This can take awhile, we're dealing with a large amount of documents!
 LDA.fit(dtm)
 
 # ## Showing Stored Words
-len(cv.get_feature_names())
+print(len(cv.get_feature_names()))
 
 import random
-
-
 for i in range(10):
-    random_word_id = random.randint(0,54776)
+    random_word_id = random.randint(0, 54776)
     print(cv.get_feature_names()[random_word_id])
 
 
 for i in range(10):
-    random_word_id = random.randint(0,54776)
+    random_word_id = random.randint(0, 54776)
     print(cv.get_feature_names()[random_word_id])
 
 
 # ### Showing Top Words Per Topic
-len(LDA.components_)
+print(len(LDA.components_))
 
-LDA.components_
+print(LDA.components_)
 
-len(LDA.components_[0])
+print(len(LDA.components_[0]))
 
 
 single_topic = LDA.components_[0]
@@ -60,13 +58,13 @@ single_topic = LDA.components_[0]
 single_topic.argsort()
 
 # Word least representative of this topic
-single_topic[18302]
+print(single_topic[18302])
 
 # Word most representative of this topic
-single_topic[42993]
+print(single_topic[42993])
 
 # Top 10 words for this topic:
-single_topic.argsort()[-10:]
+print(single_topic.argsort()[-10:])
 
 
 top_word_indices = single_topic.argsort()[-10:]
@@ -85,20 +83,17 @@ for index, topic in enumerate(LDA.components_):
 
 
 # ### Attaching Discovered Topic Labels to Original Articles
-dtm
-
-
-dtm.shape
-
-len(npr)
+print(dtm)
+print(dtm.shape)
+print(len(npr))
 
 
 topic_results = LDA.transform(dtm)
 
-topic_results.shape
+print(topic_results.shape)
 
 
-topic_results[0]
+print(topic_results[0])
 
 
 topic_results[0].round(2)
@@ -110,13 +105,30 @@ topic_results[0].argmax()
 # This means that our model thinks that the first article belongs to topic #1.
 
 # ### Combining with Original Data
-npr.head()
+print(npr.head())
 
 topic_results.argmax(axis=1)
 
 npr['Topic'] = topic_results.argmax(axis=1)
 
-npr.head(10)
+print(npr.head(10))
 
 
 # ## Great work!
+
+keyword_list = []
+for index, topic in enumerate(LDA.components_):
+    keyword_list.append([cv.get_feature_names()[i] for i in topic.argsort()[-15:]])
+
+topic_list = npr['Topic'].tolist()
+
+keyword_list_final = []
+for i in topic_list:
+    keyword_list_final.append(keyword_list[i])
+
+npr['topic_keyword'] = keyword_list_final
+npr['topic_keyword'] = npr['topic_keyword'].astype(str)
+# Data cleanning
+npr['topic_keyword'] = npr['topic_keyword'].str.replace(r'[', '')
+npr['topic_keyword'] = npr['topic_keyword'].str.replace(r']', '')
+npr['topic_keyword'] = npr['topic_keyword'].str.replace(r"'", '')
