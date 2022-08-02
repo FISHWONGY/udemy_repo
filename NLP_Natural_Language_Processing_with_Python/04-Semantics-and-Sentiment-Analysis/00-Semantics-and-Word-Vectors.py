@@ -25,12 +25,12 @@
 import spacy
 nlp = spacy.load('en_core_web_md')  # make sure to use a larger model!
 
-nlp(u'lion').vector
+print(nlp(u'lion').vector)
 
 
 doc = nlp(u'The quick brown fox jumped over the lazy dogs.')
 
-doc.vector
+print(doc.vector)
 
 
 # ## Identifying similar vectors
@@ -62,7 +62,7 @@ display(Markdown(f'<table><tr><th></th><th>{a.text}</th><th>{b.text}</th><th>{c.
 # If you're curious, the similarity between "lion" and "dandelion" is very small:
 
 nlp(u'lion').similarity(nlp(u'dandelion'))
-
+nlp(u'lion').similarity(nlp(u'tiger'))
 
 # ### Opposites are not necessarily different
 # Words that have opposite meaning, but that often appear in the same *context* may have similar vectors.

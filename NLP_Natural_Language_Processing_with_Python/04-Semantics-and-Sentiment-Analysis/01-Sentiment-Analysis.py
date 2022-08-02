@@ -45,7 +45,7 @@ sid.polarity_scores(a)
 # For this exercise we're going to apply `SentimentIntensityAnalyzer` to a dataset of 10,000 Amazon reviews. Like our movie reviews datasets, these are labeled as either "pos" or "neg". At the end we'll determine the accuracy of our sentiment analysis with VADER.
 import pandas as pd
 
-df = pd.read_csv('../TextFiles/amazonreviews.tsv', sep='\t')
+df = pd.read_csv('./udemy_repo/NLP_Natural_Language_Processing_with_Python/TextFiles/amazonreviews.tsv', sep='\t')
 df.head()
 df['label'].value_counts()
 
@@ -58,14 +58,14 @@ df.dropna(inplace=True)
 blanks = []  # start with an empty list
 
 for i, lb, rv in df.itertuples():  # iterate over the DataFrame
-    if type(rv)==str:            # avoid NaN values
+    if type(rv) == str:            # avoid NaN values
         if rv.isspace():         # test 'review' for whitespace
             blanks.append(i)     # add matching index numbers to the list
 
 df.drop(blanks, inplace=True)
 
 
-df['label'].value_counts()
+print(df['label'].value_counts())
 
 
 # In this case there were no empty records. Good!
@@ -73,7 +73,7 @@ df['label'].value_counts()
 # ## Let's run the first review through VADER
 sid.polarity_scores(df.loc[0]['review'])
 
-df.loc[0]['label']
+print(df.loc[0]['label'])
 
 
 # Great! Our first review was labeled "positive", and earned a positive compound score.
@@ -82,15 +82,15 @@ df.loc[0]['label']
 # In this next section we'll add columns to the original DataFrame to store polarity_score dictionaries, extracted compound scores, and new "pos/neg" labels derived from the compound score. We'll use this last column to perform an accuracy test.
 df['scores'] = df['review'].apply(lambda review: sid.polarity_scores(review))
 
-df.head()
+print(df.head())
 
 df['compound'] = df['scores'].apply(lambda score_dict: score_dict['compound'])
 
-df.head()
+print(df.head())
 
 df['comp_score'] = df['compound'].apply(lambda c: 'pos' if c >=0 else 'neg')
 
-df.head()
+print(df.head())
 
 
 # ## Report on Accuracy
